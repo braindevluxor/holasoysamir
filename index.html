@@ -150,6 +150,20 @@
   }
   h2 .icon { font-size: 1.3rem; }
 
+  /* Iconos SVG profesionales */
+  .ico {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: -0.14em;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+
   p { font-size: 1.08rem; color: var(--text); }
   .muted { color: var(--muted); font-size: .95rem; }
 
@@ -199,6 +213,42 @@
     letter-spacing: .05em;
     clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
     transition: all .2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .chip .ico { font-size: 1.05em; }
+
+  /* Logos de marcas */
+  .chips.logos { gap: 12px; }
+  .chip-logo {
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 10px 16px 8px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 128px;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .chip-logo:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.45);
+  }
+  .chip-logo img {
+    height: 38px;
+    max-width: 120px;
+    object-fit: contain;
+    display: block;
+  }
+  .chip-logo small {
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #333;
   }
   .chip:hover {
     background: rgba(63,255,122,.12);
@@ -420,6 +470,33 @@
   }
   .cd-time .blink { animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: .15; } }
+  .cd-verse {
+    font-size: .76rem;
+    font-style: italic;
+    color: var(--muted);
+    letter-spacing: .04em;
+    border-left: 1px solid var(--line);
+    padding-left: 16px;
+  }
+  .cd-verse b {
+    font-style: normal;
+    color: var(--green-dim);
+    font-weight: 700;
+    letter-spacing: .1em;
+  }
+  /* Alerta: menos de 24 horas */
+  .countdown-bar.urgent {
+    border-bottom-color: var(--red);
+    box-shadow: 0 4px 24px rgba(0,0,0,.65), 0 0 22px rgba(255,77,77,.45);
+    background: rgba(28, 8, 8, .97);
+  }
+  .countdown-bar.urgent .cd-time {
+    color: var(--red);
+    text-shadow: 0 0 18px rgba(255,77,77,.7);
+    animation: urgentPulse 1s ease-in-out infinite;
+  }
+  .countdown-bar.urgent .cd-verse b { color: var(--red); }
+  @keyframes urgentPulse { 50% { opacity: .55; } }
   .cd-flag {
     display: none;
     font-size: .78rem;
@@ -433,8 +510,26 @@
   }
   .cd-flag.show { display: inline-block; }
   @media (max-width: 560px) {
+    body { padding-top: 86px; }
     .cd-title { display: none; }
     .cd-flag { font-size: .7rem; padding: 3px 8px; }
+    .countdown-bar {
+      gap: 4px 12px;
+      padding: 7px 10px;
+    }
+    .cd-verse {
+      order: 5;
+      flex-basis: 100%;
+      text-align: center;
+      font-size: .68rem;
+      border-left: none;
+      padding-left: 0;
+      border-top: 1px solid var(--line);
+      padding-top: 5px;
+      margin-top: 2px;
+      white-space: normal;
+      line-height: 1.4;
+    }
   }
 
   footer {
@@ -450,10 +545,11 @@
 <body>
 
 <header>
-  <div class="countdown-bar">
-    <span class="cd-title">⏱ Próximo viernes en</span>
+  <div class="countdown-bar" id="countdownBar">
+    <span class="cd-title"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Próximo viernes en</span>
     <span class="cd-time"><span id="cd-h">00</span><span class="blink">:</span><span id="cd-m">00</span><span class="blink">:</span><span id="cd-s">00</span></span>
-    <span class="cd-flag" id="fridayFlag">🎉 ¡Hoy es viernes! 🌯</span>
+    <span class="cd-verse">"El que siembra escasez, cosechará escasez" <b>· 2 Corintios 9:6 ·</b></span>
+    <span class="cd-flag" id="fridayFlag"><svg class="ico" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> ¡Hoy es viernes!</span>
   </div>
   <div class="badge">Amigo Secreto · Dossier</div>
   <h1>SAM<span>IR</span></h1>
@@ -465,22 +561,22 @@
 
   <!-- ALERTA ALERGIA -->
   <section class="card alert">
-    <h2><span class="icon">⚠️</span> Alarma de alergia</h2>
-    <p><strong>¡CUIDADO! Soy alérgico al CHOCOLATE.</strong> Nada de dulces, bombones, galletas con chocolate ni coberturas. Si el regalo lo pica el chocolate, mejor piénsalo dos veces. 🚫🍫</p>
+    <h2><span class="icon"><svg class="ico" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></span> Alarma de alergia</h2>
+    <p><strong>¡CUIDADO! Soy alérgico al CHOCOLATE.</strong> Nada de dulces, bombones, galletas con chocolate ni coberturas. Si el regalo lo pica el chocolate, mejor piénsalo dos veces. <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg></p>
   </section>
 
   <!-- QUIÉN SOY -->
   <section class="card">
-    <h2><span class="icon">🪪</span> Perfil del operativo</h2>
+    <h2><span class="icon"><svg class="ico" viewBox="0 0 24 24"><path d="M16 10h2"/><path d="M16 14h2"/><path d="M6.17 15a3 3 0 0 1 5.66 0"/><circle cx="9" cy="11" r="2"/><rect x="2" y="5" width="20" height="14" rx="2"/></svg></span> Perfil del operativo</h2>
     <p>Mi nombre es <strong style="color:#fff">Samir</strong>. Me apasionan los juegos de mesa, desde los clásicos hasta los más modernos, y todo lo relacionado con el mundo táctico: accesorios, utilería y gadgets de buena calidad. Valoro los detalles prácticos y funcionales, y siempre estoy dispuesto a recibir recomendaciones de regalos que combinen estrategia, utilidad y buen gusto.</p>
   </section>
 
   <!-- GUSTOS -->
   <section class="card">
-    <h2><span class="icon">🎯</span> Zona de intereses</h2>
+    <h2><span class="icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span> Zona de intereses</h2>
     <div class="grid-2">
       <div>
-        <p class="muted" style="margin-bottom:8px; text-transform:uppercase; letter-spacing:.15em;">🎲 Juegos de mesa</p>
+        <p class="muted" style="margin-bottom:8px; text-transform:uppercase; letter-spacing:.15em;"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 8h.01"/><path d="M16 8h.01"/><path d="M12 12h.01"/><path d="M8 16h.01"/><path d="M16 16h.01"/></svg> Juegos de mesa</p>
         <ul>
           <li>Estrategia, cooperativos y competencia</li>
           <li>Expansiones y juegos nuevos por probar</li>
@@ -488,7 +584,7 @@
         </ul>
       </div>
       <div>
-        <p class="muted" style="margin-bottom:8px; text-transform:uppercase; letter-spacing:.15em;">🔦 Accesorios tácticos</p>
+        <p class="muted" style="margin-bottom:8px; text-transform:uppercase; letter-spacing:.15em;"><svg class="ico" viewBox="0 0 24 24"><path d="M18 6c0 2-2 2-2 4v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V10c0-2-2-2-2-4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M6 6h12"/><path d="M12 12h.01"/></svg> Accesorios tácticos</p>
         <ul>
           <li>Linternas y utilería táctica</li>
           <li>Mochilas, organizadores y EDC</li>
@@ -500,22 +596,21 @@
 
   <!-- VIERNES -->
   <section class="card friday">
-    <h2><span class="icon">🌯</span> Regalo de los viernes</h2>
+    <h2><span class="icon"><svg class="ico" viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h1a2 2 0 0 0 2-2V2"/><path d="M6 2v20"/><path d="M18 2c-1.7 1.2-3 3.2-3 6v4h4"/><path d="M19 12v10"/></svg></span> Regalo de los viernes</h2>
     <p style="margin-bottom:14px;">Cada viernes el combo perfecto es <strong style="color:var(--amber)">snack salado</strong>. ¡Doritos y compañía son bienvenidos!</p>
-    <div class="chips">
-      <span class="chip hot">🌶️ Doritos</span>
-      <span class="chip hot">🔥 Takis</span>
-      <span class="chip hot">🧀 Cheetos</span>
-      <span class="chip">🥔 Papas Ruffles</span>
-      <span class="chip">🌽 Platanitos</span>
-      <span class="chip">🥨 Snacks salados</span>
-      <span class="chip">🥤 Refresco / bebida</span>
+    <div class="chips logos">
+      <span class="chip-logo"><img src="logos/doritos.png" alt="Doritos"><small>Doritos</small></span>
+      <span class="chip-logo"><img src="logos/takis.webp" alt="Takis"><small>Takis</small></span>
+      <span class="chip-logo"><img src="logos/cheetos.webp" alt="Cheetos"><small>Cheetos</small></span>
+      <span class="chip-logo"><img src="logos/ruffles.svg" alt="Ruffles"><small>Papas Ruffles</small></span>
+      <span class="chip-logo"><img src="logos/natuchips.webp" alt="Natuchips"><small>Snacks salados</small></span>
+      <span class="chip-logo"><img src="logos/refrescos.png" alt="Refrescos"><small>Refresco / bebida</small></span>
     </div>
   </section>
 
   <!-- JERARQUÍA DE REGALOS -->
   <section class="card">
-    <h2><span class="icon">🎖️</span> Jerarquía de regalos</h2>
+    <h2><span class="icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></svg></span> Jerarquía de regalos</h2>
     <div class="tiers">
       <div class="tier">
         <div class="tier-label">Regalo final<br>(1ra selección)</div>
@@ -534,7 +629,7 @@
 
   <!-- IDEAS RAPIDAS -->
   <section class="card">
-    <h2><span class="icon">💡</span> Ideas rápidas de regalo</h2>
+    <h2><span class="icon"><svg class="ico" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a6 6 0 0 0-3.6 10.9c.6.5 1.1 1.3 1.1 2.1v1h5v-1c0-.8.5-1.6 1.1-2.1A6 6 0 0 0 12 2Z"/></svg></span> Ideas rápidas de regalo</h2>
     <div class="grid-2">
       <ul>
         <li>Linterna táctica recargable</li>
@@ -553,7 +648,7 @@
 
   <!-- MEMES -->
   <section class="card memes">
-    <h2><span class="icon">😂</span> Memes del amigo secreto</h2>
+    <h2><span class="icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg></span> Memes del amigo secreto</h2>
     <p class="muted" style="margin-bottom:16px;">Inteligencia recopilada sobre la misión del amigo secreto.</p>
 
     <div class="carousel" id="carousel">
@@ -570,22 +665,13 @@
       <div class="slide"><img src="meme%2011.jpg" alt="Meme 11" loading="lazy"></div>
       <div class="slide"><img src="meme%2012.jpg" alt="Meme 12" loading="lazy"></div>
 
-      <button class="car-btn car-prev" id="prevBtn" aria-label="Anterior">❮</button>
-      <button class="car-btn car-next" id="nextBtn" aria-label="Siguiente">❯</button>
+      <button class="car-btn car-prev" id="prevBtn" aria-label="Anterior"><svg class="ico" viewBox="0 0 24 24" style="width:1.2em;height:1.2em;"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button class="car-btn car-next" id="nextBtn" aria-label="Siguiente"><svg class="ico" viewBox="0 0 24 24" style="width:1.2em;height:1.2em;"><path d="m9 18 6-6-6-6"/></svg></button>
       <div class="car-counter" id="counter">01 / 12</div>
     </div>
 
     <div class="dots" id="dots"></div>
     <div class="car-caption">Clic en las flechas o espera a la siguiente imagen</div>
-  </section>
-
-  <!-- VERSICULO -->
-  <section class="verse">
-    <blockquote>
-      "Pero esto digo: El que siembra escasamente, también cosechará escasamente;
-      y el que siembra con liberalidad, también cosechará con liberalidad."
-    </blockquote>
-    <cite>2 Corintios 9:6</cite>
   </section>
 
 </main>
@@ -689,6 +775,14 @@
     hEl.textContent = pad(hours);
     mEl.textContent = pad(minutes);
     sEl.textContent = pad(seconds);
+
+    // Alerta roja cuando falten menos de 24 horas
+    var bar = document.getElementById('countdownBar');
+    if (diff > 0 && diff <= 24 * 60 * 60 * 1000) {
+      bar.classList.add('urgent');
+    } else {
+      bar.classList.remove('urgent');
+    }
 
     // Bandera si hoy es viernes
     if (now.getDay() === 5) {
