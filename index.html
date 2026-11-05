@@ -6,7 +6,7 @@
 <title>Samir · Perfil Amigo Secreto</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0f0c;
@@ -70,12 +70,13 @@
   }
 
   h1 {
-    font-family: 'Black Ops One', cursive;
-    font-size: clamp(3rem, 10vw, 5.5rem);
-    letter-spacing: .06em;
-    color: #fff;
-    text-shadow: 0 0 24px rgba(63,255,122,.45);
+    font-family: 'Share Tech Mono', 'Courier New', monospace;
+    font-size: clamp(3.2rem, 11vw, 6rem);
+    letter-spacing: .18em;
+    color: var(--green);
+    text-shadow: 0 0 24px rgba(63,255,122,.55), 0 0 6px rgba(63,255,122,.7);
     line-height: 1;
+    text-transform: uppercase;
   }
   h1 span { color: var(--green); }
 
@@ -532,6 +533,106 @@
     }
   }
 
+  /* ---------- LETRERO 2 REGALOS ---------- */
+  .sign {
+    background:
+      repeating-linear-gradient(45deg, rgba(255,255,255,.02) 0 10px, transparent 10px 20px),
+      var(--panel);
+    border: 2px solid var(--line);
+    padding: 0;
+    overflow: hidden;
+    text-align: center;
+  }
+  .sign:hover { transform: none; border-color: var(--line); }
+  .sign::after { display: none; }
+  .sign-head {
+    background: rgba(63,255,122,.08);
+    border-bottom: 2px solid var(--line);
+    padding: 18px 20px 16px;
+  }
+  .sign-head h2 {
+    justify-content: center;
+    color: #fff;
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+  }
+  .sign-head p {
+    color: var(--muted);
+    font-size: .95rem;
+    letter-spacing: .06em;
+  }
+  .sign-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .sign-box {
+    padding: 26px 18px;
+    position: relative;
+  }
+  .sign-box + .sign-box { border-left: 2px dashed var(--line); }
+  .sign-box .tag {
+    display: inline-block;
+    font-family: 'Black Ops One', cursive;
+    font-size: .72rem;
+    letter-spacing: .25em;
+    padding: 5px 14px;
+    margin-bottom: 14px;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  }
+  .sign-box.good .tag { background: var(--green); color: #0a0f0c; }
+  .sign-box.bad .tag { background: var(--red); color: #fff; }
+  .sign-box .big {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    letter-spacing: .1em;
+    line-height: 1.1;
+    display: block;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .sign-box.good .big { color: var(--green); text-shadow: 0 0 16px rgba(63,255,122,.5); }
+  .sign-box.bad .big { color: var(--red); text-shadow: 0 0 16px rgba(255,77,77,.5); }
+  .sign-box small {
+    color: var(--muted);
+    font-size: .88rem;
+    display: block;
+    line-height: 1.5;
+  }
+  .sign-note {
+    border-top: 2px dashed var(--line);
+    padding: 16px 20px;
+    color: var(--muted);
+    font-size: .98rem;
+    font-style: italic;
+    letter-spacing: .03em;
+  }
+  .sign-box .box-verse {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line);
+    font-style: italic;
+    color: var(--muted);
+    font-size: .88rem;
+    line-height: 1.55;
+  }
+  .sign-box.good .box-verse { color: #9fd8b4; }
+  .sign-box.bad .box-verse { color: #e8a0a0; }
+  .sign-box .box-verse b {
+    display: block;
+    font-style: normal;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: .15em;
+    font-size: .78rem;
+    margin-top: 8px;
+    text-transform: uppercase;
+  }
+  .sign-box.good .box-verse b { color: var(--green); }
+  .sign-box.bad .box-verse b { color: var(--red); }
+  @media (max-width: 560px) {
+    .sign-grid { grid-template-columns: 1fr; }
+    .sign-box + .sign-box { border-left: none; border-top: 2px dashed var(--line); }
+  }
+
   footer {
     text-align: center;
     margin-top: 40px;
@@ -625,6 +726,27 @@
         <div class="tier-desc"><strong style="color:#fff">Juegos de mesa</strong> — si la misión lo permite, un buen juego siempre es acierto seguro.</div>
       </div>
     </div>
+  </section>
+
+  <!-- LETRERO 2 REGALOS -->
+  <section class="card sign">
+    <div class="sign-head">
+      <h2><span class="icon"><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C9 3 12 8 12 8s3-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg></span> Mis 2 regalos para el amigo secreto</h2>
+      <p>Tendré <strong style="color:#fff">2 regalos preparados</strong>: uno bueno y uno malo…</p>
+    </div>
+    <div class="sign-grid">
+      <div class="sign-box good">
+        <span class="tag">Regalo bueno</span>
+        <span class="big">✓ Elegido con criterio</span>
+        <div class="box-verse">"Cada uno dé como propuso en su corazón; no de tristeza, ni por necesidad, porque Dios ama al que da con alegría."<b>— 2 Corintios 9:7 —</b></div>
+      </div>
+      <div class="sign-box bad">
+        <span class="tag">Regalo malo</span>
+        <span class="big">✗ Sorpresa dudosa</span>
+        <div class="box-verse">"No hay paz, dice el Señor, para los malvados."<b>— Isaías 48:22 —</b></div>
+      </div>
+    </div>
+    <div class="sign-note">Algo simpático, inesperado… y con estilo. Que nadie se ofenda, es parte del juego.</div>
   </section>
 
   <!-- IDEAS RAPIDAS -->
