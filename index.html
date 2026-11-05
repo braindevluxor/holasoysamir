@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samir · Perfil Amigo Secreto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f0c;
+    --panel: #111815;
+    --panel-2: #16211c;
+    --line: #1f2f27;
+    --green: #3dff7a;
+    --green-dim: #1f9c4c;
+    --amber: #ffb347;
+    --red: #ff4d4d;
+    --text: #d7e4dc;
+    --muted: #7f948a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(rgba(63,255,122,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(63,255,122,.03) 1px, transparent 1px);
+    background-size: 42px 42px;
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    line-height: 1.6;
+    padding-bottom: 60px;
+  }
+
+  /* ---------- HEADER ---------- */
+  header {
+    position: relative;
+    padding: 55px 20px 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(63,255,122,.12), transparent 65%),
+      var(--panel);
+    overflow: hidden;
+  }
+  header::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: repeating-linear-gradient(90deg, var(--green) 0 18px, transparent 18px 36px);
+    opacity: .7;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: .78rem;
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    color: var(--green);
+    border: 1px solid var(--green-dim);
+    background: rgba(63,255,122,.07);
+    padding: 6px 16px;
+    margin-bottom: 18px;
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  }
+
+  h1 {
+    font-family: 'Black Ops One', cursive;
+    font-size: clamp(3rem, 10vw, 5.5rem);
+    letter-spacing: .06em;
+    color: #fff;
+    text-shadow: 0 0 24px rgba(63,255,122,.45);
+    line-height: 1;
+  }
+  h1 span { color: var(--green); }
+
+  .tagline {
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 1.15rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 22px;
+    font-size: .9rem;
+    color: var(--green);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+  .dot {
+    width: 9px; height: 9px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--green);
+    animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse { 50% { opacity: .25; } }
+
+  /* ---------- LAYOUT ---------- */
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px 0;
+    display: grid;
+    gap: 22px;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--green-dim);
+    padding: 26px 28px;
+    position: relative;
+    transition: border-color .25s, transform .25s;
+  }
+  .card:hover {
+    border-left-color: var(--green);
+    transform: translateX(4px);
+  }
+  .card::after {
+    content: "";
+    position: absolute;
+    top: 10px; right: 12px;
+    width: 14px; height: 14px;
+    border-top: 2px solid var(--green-dim);
+    border-right: 2px solid var(--green-dim);
+    opacity: .6;
+  }
+
+  h2 {
+    font-family: 'Black Ops One', cursive;
+    font-size: 1.15rem;
+    letter-spacing: .12em;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2 .icon { font-size: 1.3rem; }
+
+  p { font-size: 1.08rem; color: var(--text); }
+  .muted { color: var(--muted); font-size: .95rem; }
+
+  /* ---------- ALERTA ALERGIA ---------- */
+  .alert {
+    border-color: rgba(255,77,77,.5);
+    border-left-color: var(--red);
+    background:
+      linear-gradient(90deg, rgba(255,77,77,.08), transparent 60%),
+      var(--panel);
+  }
+  .alert:hover { border-left-color: var(--red); }
+  .alert::after { border-color: rgba(255,77,77,.5); }
+  .alert h2 { color: var(--red); }
+  .alert strong { color: #fff; }
+
+  /* ---------- LISTAS ---------- */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+  }
+
+  ul { list-style: none; }
+  li {
+    padding: 9px 0 9px 26px;
+    position: relative;
+    border-bottom: 1px dashed var(--line);
+    font-size: 1.05rem;
+  }
+  li:last-child { border-bottom: none; }
+  li::before {
+    content: "▸";
+    position: absolute;
+    left: 4px;
+    color: var(--green);
+  }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    color: var(--text);
+    padding: 8px 16px;
+    font-size: .95rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    transition: all .2s;
+  }
+  .chip:hover {
+    background: rgba(63,255,122,.12);
+    border-color: var(--green-dim);
+    color: var(--green);
+  }
+  .chip.hot {
+    background: rgba(255,179,71,.12);
+    border-color: rgba(255,179,71,.5);
+    color: var(--amber);
+  }
+  .chip.hot:hover { background: rgba(255,179,71,.22); color: var(--amber); }
+
+  /* ---------- VIERNES ---------- */
+  .friday h2 { color: var(--amber); }
+  .friday { border-left-color: var(--amber); }
+  .friday:hover { border-left-color: var(--amber); }
+  .friday::after { border-color: rgba(255,179,71,.5); }
+  .friday li::before { color: var(--amber); }
+
+  /* ---------- TABLA JERARQUÍA ---------- */
+  .tiers { display: grid; gap: 14px; }
+  .tier {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 16px;
+    align-items: center;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    padding: 14px 18px;
+  }
+  .tier-label {
+    font-family: 'Black Ops One', cursive;
+    font-size: .8rem;
+    letter-spacing: .1em;
+    text-align: center;
+    padding: 8px 4px;
+    color: #0a0f0c;
+    background: var(--green);
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  }
+  .tier.t2 .tier-label { background: var(--amber); }
+  .tier.t3 .tier-label { background: var(--muted); }
+  .tier-desc { font-size: 1.02rem; }
+  @media (max-width: 520px) {
+    .tier { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- VERSÍCULO ---------- */
+  .verse {
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 50% 120%, rgba(63,255,122,.1), transparent 70%),
+      var(--panel);
+    border: 1px solid var(--green-dim);
+    padding: 40px 28px;
+    position: relative;
+  }
+  .verse::before, .verse::after {
+    content: "";
+    position: absolute;
+    width: 26px; height: 26px;
+    border-color: var(--green);
+    border-style: solid;
+  }
+  .verse::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .verse::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+  .verse blockquote {
+    font-size: clamp(1.15rem, 3vw, 1.45rem);
+    font-style: italic;
+    color: #fff;
+    max-width: 720px;
+    margin: 0 auto 14px;
+    line-height: 1.7;
+  }
+  .verse cite {
+    font-style: normal;
+    color: var(--green);
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    font-size: .9rem;
+    font-weight: 700;
+  }
+
+  /* ---------- CARRUSEL DE MEMES ---------- */
+  .memes { border-left-color: var(--green); }
+  .carousel {
+    position: relative;
+    margin-top: 6px;
+    background: #050807;
+    border: 1px solid var(--line);
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    max-height: 560px;
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slide.active { opacity: 1; visibility: visible; }
+  .slide img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .car-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    background: rgba(10,15,12,.8);
+    border: 1px solid var(--green-dim);
+    color: var(--green);
+    width: 44px; height: 44px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all .2s;
+    line-height: 1;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+  }
+  .car-btn:hover {
+    background: var(--green);
+    color: #0a0f0c;
+    box-shadow: 0 0 18px rgba(63,255,122,.5);
+  }
+  .car-prev { left: 12px; }
+  .car-next { right: 12px; }
+
+  .car-counter {
+    position: absolute;
+    top: 12px; right: 14px;
+    z-index: 5;
+    background: rgba(10,15,12,.85);
+    border: 1px solid var(--line);
+    color: var(--green);
+    font-size: .85rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    padding: 4px 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .dot-btn {
+    width: 12px; height: 12px;
+    background: var(--panel-2);
+    border: 1px solid var(--green-dim);
+    cursor: pointer;
+    padding: 0;
+    transition: all .2s;
+    clip-path: polygon(3px 0, 100% 0, calc(100% - 3px) 100%, 0 100%);
+  }
+  .dot-btn.active {
+    background: var(--green);
+    box-shadow: 0 0 10px rgba(63,255,122,.7);
+  }
+  .dot-btn:hover { background: var(--green-dim); }
+
+  .car-caption {
+    text-align: center;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: .9rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 560px) {
+    .carousel { aspect-ratio: 4 / 3; }
+    .car-btn { width: 36px; height: 36px; font-size: 1.05rem; }
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 40px;
+    color: var(--muted);
+    font-size: .85rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Amigo Secreto · Dossier</div>
+  <h1>SAM<span>IR</span></h1>
+  <div class="tagline">Juegos de mesa · Equipo táctico · Snacks</div>
+  <div class="status"><span class="dot"></span> Esperando mis regalos</div>
+</header>
+
+<main>
+
+  <!-- ALERTA ALERGIA -->
+  <section class="card alert">
+    <h2><span class="icon">⚠️</span> Alarma de alergia</h2>
+    <p><strong>¡CUIDADO! Soy alérgico al CHOCOLATE.</strong> Nada de dulces, bombones, galletas con chocolate ni coberturas. Si el regalo lo pica el chocolate, mejor piénsalo dos veces. 🚫🍫</p>
+  </section>
+
+  <!-- QUIÉN SOY -->
+  <section class="card">
+    <h2><span class="icon">🪪</span> Perfil del operativo</h2>
+    <p>Mi nombre es <strong style="color:#fff">Samir</strong>. Fanático de los juegos de mesa (de lo clásico a lo moderno) y de todo lo que huela a equipo táctico: utilería, accesorios y gadgets listos para la misión. Si es estratégico, táctico o sabroso, estoy dentro.</p>
+  </section>
+
+  <!-- GUSTOS -->
+  <section class="card">
+    <h2><span class="icon">🎯</span> Zona de intereses</h2>
+    <div class="grid-2">
+      <div>
+        <p class="muted" style="margin-bottom:8px; text-transform:uppercase; letter-spacing:.15em;">🎲 Juegos de mesa</p>
+        <ul>
+          <li>Estrategia, cooperativos y competencia</li>
+          <li>Expansiones y juegos nuevos por probar</li>
+          <li>Clásicos: Dobble, Catan, Azul, 7 Wonders</li>
+        </ul>
+      </div>
+      <div>
+        <p class="muted" style="margin-bottom:8px; text-transform:uppercase; letter-spacing:.15em;">🔦 Accesorios tácticos</p>
+        <ul>
+          <li>Linternas y utilería táctica</li>
+          <li>Mochilas, organizadores y EDC</li>
+          <li>Gadgets, multiusos y equipo de supervivencia</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIERNES -->
+  <section class="card friday">
+    <h2><span class="icon">🌯</span> Regalo de los viernes</h2>
+    <p style="margin-bottom:14px;">Cada viernes el combo perfecto es <strong style="color:var(--amber)">snack salado</strong>. ¡Doritos y compañía son bienvenidos!</p>
+    <div class="chips">
+      <span class="chip hot">🌶️ Doritos</span>
+      <span class="chip hot">🔥 Takis</span>
+      <span class="chip hot">🧀 Cheetos</span>
+      <span class="chip">🥔 Papas Ruffles</span>
+      <span class="chip">🌽 Platanitos</span>
+      <span class="chip">🥨 Snacks salados</span>
+      <span class="chip">🥤 Refresco / bebida</span>
+    </div>
+  </section>
+
+  <!-- JERARQUÍA DE REGALOS -->
+  <section class="card">
+    <h2><span class="icon">🎖️</span> Jerarquía de regalos</h2>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-label">Regalo final<br>(1ra selección)</div>
+        <div class="tier-desc"><strong style="color:#fff">Accesorio táctico</strong> — la pieza estrella de la misión: linterna táctica, mochila, organizador EDC, multiusos o cualquier gadget táctico de buena calidad.</div>
+      </div>
+      <div class="tier t2">
+        <div class="tier-label">Viernes</div>
+        <div class="tier-desc"><strong style="color:#fff">Doritos u otros snacks</strong> de este estilo (Takis, Cheetos, papas, etc.).</div>
+      </div>
+      <div class="tier t3">
+        <div class="tier-label">Comodín</div>
+        <div class="tier-desc"><strong style="color:#fff">Juegos de mesa</strong> — si la misión lo permite, un buen juego siempre es acierto seguro.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IDEAS RAPIDAS -->
+  <section class="card">
+    <h2><span class="icon">💡</span> Ideas rápidas de regalo</h2>
+    <div class="grid-2">
+      <ul>
+        <li>Linterna táctica recargable</li>
+        <li>Cuchillo multiusos / navaja táctica</li>
+        <li>Mochila táctica o organizador modular</li>
+        <li>Reloj o brújula de supervivencia</li>
+      </ul>
+      <ul>
+        <li>Juego de mesa nuevo o expansión</li>
+        <li>Accesorios para juegos (fichas, dados, tablero)</li>
+        <li>Combo snacks para el viernes</li>
+        <li>Guantes tácticos o buff/cachubela</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- MEMES -->
+  <section class="card memes">
+    <h2><span class="icon">😂</span> Memes del amigo secreto</h2>
+    <p class="muted" style="margin-bottom:16px;">Inteligencia recopilada sobre la misión del amigo secreto.</p>
+
+    <div class="carousel" id="carousel">
+      <div class="slide active"><img src="meme%201.jpg" alt="Meme 1" loading="lazy"></div>
+      <div class="slide"><img src="meme%202.jpg" alt="Meme 2" loading="lazy"></div>
+      <div class="slide"><img src="meme%203.jpg" alt="Meme 3" loading="lazy"></div>
+      <div class="slide"><img src="meme%204.jpg" alt="Meme 4" loading="lazy"></div>
+      <div class="slide"><img src="meme%205.jpg" alt="Meme 5" loading="lazy"></div>
+      <div class="slide"><img src="meme%206.jpg" alt="Meme 6" loading="lazy"></div>
+      <div class="slide"><img src="meme%207.jpg" alt="Meme 7" loading="lazy"></div>
+      <div class="slide"><img src="meme%208.avif" alt="Meme 8" loading="lazy"></div>
+      <div class="slide"><img src="meme%209.jpg" alt="Meme 9" loading="lazy"></div>
+      <div class="slide"><img src="meme%2010.jpg" alt="Meme 10" loading="lazy"></div>
+      <div class="slide"><img src="meme%2011.jpg" alt="Meme 11" loading="lazy"></div>
+      <div class="slide"><img src="meme%2012.jpg" alt="Meme 12" loading="lazy"></div>
+
+      <button class="car-btn car-prev" id="prevBtn" aria-label="Anterior">❮</button>
+      <button class="car-btn car-next" id="nextBtn" aria-label="Siguiente">❯</button>
+      <div class="car-counter" id="counter">01 / 12</div>
+    </div>
+
+    <div class="dots" id="dots"></div>
+    <div class="car-caption">Clic en las flechas o espera a la siguiente imagen</div>
+  </section>
+
+  <!-- VERSICULO -->
+  <section class="verse">
+    <blockquote>
+      "Pero esto digo: El que siembra escasamente, también cosechará escasamente;
+      y el que siembra con liberalidad, también cosechará con liberalidad."
+    </blockquote>
+    <cite>2 Corintios 9:6</cite>
+  </section>
+
+</main>
+
+<footer>Archivo confidencial · Amigo Secreto · Samir</footer>
+
+<script>
+(function () {
+  var slides = document.querySelectorAll('.slide');
+  var dotsWrap = document.getElementById('dots');
+  var counter = document.getElementById('counter');
+  var current = 0;
+  var timer;
+  var total = slides.length;
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  // Crear puntos de navegación
+  slides.forEach(function (_, i) {
+    var b = document.createElement('button');
+    b.className = 'dot-btn' + (i === 0 ? ' active' : '');
+    b.setAttribute('aria-label', 'Ir a la imagen ' + (i + 1));
+    b.addEventListener('click', function () { goTo(i); });
+    dotsWrap.appendChild(b);
+  });
+  var dots = dotsWrap.querySelectorAll('.dot-btn');
+
+  function goTo(i) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (i + total) % total;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    counter.textContent = pad(current + 1) + ' / ' + pad(total);
+    restart();
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  function restart() {
+    clearInterval(timer);
+    timer = setInterval(next, 4000); // cambia cada 4 segundos
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', next);
+  document.getElementById('prevBtn').addEventListener('click', prev);
+
+  // Pausar al pasar el mouse
+  var carousel = document.getElementById('carousel');
+  carousel.addEventListener('mouseenter', function () { clearInterval(timer); });
+  carousel.addEventListener('mouseleave', restart);
+
+  // Navegación con teclado
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+  });
+
+  counter.textContent = '01 / ' + pad(total);
+  restart();
+})();
+</script>
+
+</body>
+</html>
