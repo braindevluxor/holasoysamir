@@ -32,6 +32,7 @@
     color: var(--text);
     font-family: 'Rajdhani', sans-serif;
     line-height: 1.6;
+    padding-top: 58px;
     padding-bottom: 60px;
   }
 
@@ -386,6 +387,56 @@
     .car-btn { width: 36px; height: 36px; font-size: 1.05rem; }
   }
 
+  /* ---------- CUENTA REGRESIVA (FIJA EN CABECERA) ---------- */
+  .countdown-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    padding: 9px 14px;
+    background: rgba(8, 12, 10, .97);
+    border-bottom: 2px solid var(--green);
+    box-shadow: 0 4px 24px rgba(0,0,0,.65), 0 0 18px rgba(63,255,122,.25);
+    backdrop-filter: blur(6px);
+  }
+  .cd-title {
+    font-size: .78rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .cd-time {
+    font-family: 'Black Ops One', cursive;
+    font-size: clamp(1.15rem, 4vw, 1.9rem);
+    color: var(--green);
+    text-shadow: 0 0 16px rgba(63,255,122,.6);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .06em;
+    white-space: nowrap;
+  }
+  .cd-time .blink { animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: .15; } }
+  .cd-flag {
+    display: none;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    color: #0a0f0c;
+    background: var(--amber);
+    padding: 4px 12px;
+    white-space: nowrap;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  }
+  .cd-flag.show { display: inline-block; }
+  @media (max-width: 560px) {
+    .cd-title { display: none; }
+    .cd-flag { font-size: .7rem; padding: 3px 8px; }
+  }
+
   footer {
     text-align: center;
     margin-top: 40px;
@@ -399,6 +450,11 @@
 <body>
 
 <header>
+  <div class="countdown-bar">
+    <span class="cd-title">⏱ Próximo viernes en</span>
+    <span class="cd-time"><span id="cd-h">00</span><span class="blink">:</span><span id="cd-m">00</span><span class="blink">:</span><span id="cd-s">00</span></span>
+    <span class="cd-flag" id="fridayFlag">🎉 ¡Hoy es viernes! 🌯</span>
+  </div>
   <div class="badge">Amigo Secreto · Dossier</div>
   <h1>SAM<span>IR</span></h1>
   <div class="tagline">Juegos de mesa · Equipo táctico · Snacks</div>
@@ -591,6 +647,59 @@
 
   counter.textContent = '01 / ' + pad(total);
   restart();
+})();
+</script>
+<script>
+/* ---------- CUENTA REGRESIVA AL VIERNES ---------- */
+(function () {
+  var hEl = document.getElementById('cd-h');
+  var mEl = document.getElementById('cd-m');
+  var sEl = document.getElementById('cd-s');
+  var flag = document.getElementById('fridayFlag');
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  // Próximo viernes a las 8:00 AM
+  function getNextFriday() {
+    var now = new Date();
+    var target = new Date(now);
+    var day = now.getDay();          // 0 = domingo ... 5 = viernes
+    var daysUntil = (5 - day + 7) % 7;
+    target.setDate(now.getDate() + daysUntil);
+    target.setHours(8, 0, 0, 0);
+
+    // Si ya pasó el viernes de esta semana (o son las 8:00 AM o más de viernes), va al siguiente
+    if (target <= now) {
+      target.setDate(target.getDate() + 7);
+    }
+    return target;
+  }
+
+  function tick() {
+    var now = new Date();
+    var diff = getNextFriday() - now;
+
+    if (diff < 0) diff = 0;
+
+    var totalSeconds = Math.floor(diff / 1000);
+    var hours = Math.floor(totalSeconds / 3600);
+    var minutes = Math.floor((totalSeconds % 3600) / 60);
+    var seconds = totalSeconds % 60;
+
+    hEl.textContent = pad(hours);
+    mEl.textContent = pad(minutes);
+    sEl.textContent = pad(seconds);
+
+    // Bandera si hoy es viernes
+    if (now.getDay() === 5) {
+      flag.classList.add('show');
+    } else {
+      flag.classList.remove('show');
+    }
+  }
+
+  tick();
+  setInterval(tick, 1000);
 })();
 </script>
 
