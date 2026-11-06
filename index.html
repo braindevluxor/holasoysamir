@@ -633,6 +633,156 @@
     .sign-box + .sign-box { border-left: none; border-top: 2px dashed var(--line); }
   }
 
+  /* ---------- SPLASH BIENVENIDA ---------- */
+  .splash-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(4, 7, 5, .96);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: splashIn .4s ease;
+  }
+  .splash-overlay.hide {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .45s ease, visibility .45s;
+  }
+  @keyframes splashIn { from { opacity: 0; } }
+
+  .splash {
+    background: var(--panel);
+    border: 2px solid var(--green);
+    max-width: 560px;
+    width: 100%;
+    padding: 34px 30px 30px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 0 60px rgba(63,255,122,.28), 0 20px 60px rgba(0,0,0,.7);
+    animation: splashPop .5s cubic-bezier(.2, 1.4, .4, 1);
+    clip-path: polygon(22px 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%, 0 22px);
+  }
+  @keyframes splashPop { from { transform: scale(.8); opacity: 0; } }
+
+  .splash .corner {
+    position: absolute;
+    width: 28px; height: 28px;
+    border-color: var(--green);
+    border-style: solid;
+  }
+  .splash .c1 { top: 8px; left: 8px; border-width: 3px 0 0 3px; }
+  .splash .c2 { top: 8px; right: 8px; border-width: 3px 3px 0 0; }
+  .splash .c3 { bottom: 8px; left: 8px; border-width: 0 0 3px 3px; }
+  .splash .c4 { bottom: 8px; right: 8px; border-width: 0 3px 3px 0; }
+
+  .splash-badge {
+    display: inline-block;
+    font-size: .7rem;
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    color: #0a0f0c;
+    background: var(--green);
+    font-weight: 700;
+    padding: 6px 16px;
+    margin-bottom: 18px;
+    clip-path: polygon(9px 0, 100% 0, calc(100% - 9px) 100%, 0 100%);
+  }
+  .splash h3 {
+    font-family: 'Black Ops One', cursive;
+    font-size: clamp(1.3rem, 5vw, 1.7rem);
+    color: #fff;
+    letter-spacing: .06em;
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+  .splash h3 span { color: var(--green); }
+  .splash .msg {
+    color: var(--text);
+    font-size: 1.02rem;
+    line-height: 1.65;
+    margin-bottom: 24px;
+  }
+  .splash .msg strong { color: var(--green); }
+
+  /* Barras de probabilidad */
+  .prob {
+    text-align: left;
+    margin-bottom: 14px;
+  }
+  .prob-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .prob-row .pct {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+  }
+  .prob.good .prob-row { color: var(--green); }
+  .prob.bad .prob-row { color: var(--red); }
+  .prob-track {
+    height: 14px;
+    background: #050807;
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .prob-fill {
+    height: 100%;
+    width: 0;
+    transition: width 1.4s cubic-bezier(.2, .8, .3, 1) .5s;
+  }
+  .prob.good .prob-fill {
+    background: repeating-linear-gradient(45deg, var(--green) 0 8px, var(--green-dim) 8px 16px);
+    box-shadow: 0 0 12px rgba(63,255,122,.6);
+  }
+  .prob.bad .prob-fill {
+    background: repeating-linear-gradient(45deg, var(--red) 0 8px, #a32b2b 8px 16px);
+  }
+  .splash.play .prob-fill { width: var(--w); }
+
+  .splash-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 18px;
+    font-size: .8rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--green);
+    border: 1px solid var(--green-dim);
+    background: rgba(63,255,122,.08);
+    padding: 8px 16px;
+  }
+  .splash-status .dot { animation: pulse 1.4s infinite; }
+
+  .splash-btn {
+    display: block;
+    width: 100%;
+    margin-top: 24px;
+    background: var(--green);
+    color: #0a0f0c;
+    border: none;
+    font-family: 'Black Ops One', cursive;
+    font-size: .95rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    padding: 15px;
+    cursor: pointer;
+    clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+    transition: all .2s;
+  }
+  .splash-btn:hover {
+    background: #fff;
+    box-shadow: 0 0 24px rgba(63,255,122,.6);
+  }
+
   footer {
     text-align: center;
     margin-top: 40px;
@@ -644,6 +794,36 @@
 </style>
 </head>
 <body>
+
+<!-- SPLASH BIENVENIDA -->
+<div class="splash-overlay" id="splash">
+  <div class="splash" id="splashCard">
+    <span class="corner c1"></span>
+    <span class="corner c2"></span>
+    <span class="corner c3"></span>
+    <span class="corner c4"></span>
+
+    <div class="splash-badge">Informe de misión</div>
+    <h3>¡Vas por <span>buen camino</span>, amigo secreto!</h3>
+    <p class="msg">
+      El primer regalo ya fue entregado y la aceptación hasta el momento es
+      <strong>positiva</strong>. Sigue así: el premio se acerca…
+    </p>
+
+    <div class="prob good">
+      <div class="prob-row"><span>Regalo bueno</span><span class="pct">90%</span></div>
+      <div class="prob-track"><div class="prob-fill" style="--w:90%"></div></div>
+    </div>
+    <div class="prob bad">
+      <div class="prob-row"><span>Regalo malo</span><span class="pct">10%</span></div>
+      <div class="prob-track"><div class="prob-fill" style="--w:10%"></div></div>
+    </div>
+
+    <div class="splash-status"><span class="dot"></span> Aceptación positiva · En curso</div>
+
+    <button class="splash-btn" id="splashBtn">Entrar al dossier</button>
+  </div>
+</div>
 
 <header>
   <div class="countdown-bar" id="countdownBar">
@@ -799,6 +979,34 @@
 </main>
 
 <footer>Archivo confidencial · Amigo Secreto · Samir</footer>
+
+<script>
+/* ---------- SPLASH ---------- */
+(function () {
+  var splash = document.getElementById('splash');
+  var card = document.getElementById('splashCard');
+  var btn = document.getElementById('splashBtn');
+
+  // Animar barras al abrir
+  requestAnimationFrame(function () {
+    setTimeout(function () { card.classList.add('play'); }, 150);
+  });
+
+  function close() {
+    splash.classList.add('hide');
+    setTimeout(function () { splash.remove(); }, 500);
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && document.getElementById('splash')) close();
+  });
+
+  // Bloquear scroll mientras el splash está abierto
+  document.body.style.overflow = 'hidden';
+})();
+</script>
 
 <script>
 (function () {
