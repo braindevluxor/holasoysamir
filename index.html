@@ -679,7 +679,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     animation: splashIn .4s ease;
   }
   .splash-overlay.hide {
@@ -691,13 +693,17 @@
 
   .splash {
     background: var(--panel);
-    border: 2px solid var(--green);
+    border: 2px solid var(--red);
     max-width: 560px;
     width: 100%;
+    max-height: calc(100vh - 32px);
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 34px 30px 30px;
     text-align: center;
     position: relative;
-    box-shadow: 0 0 60px rgba(63,255,122,.28), 0 20px 60px rgba(0,0,0,.7);
+    box-shadow: 0 0 60px rgba(255,77,77,.3), 0 20px 60px rgba(0,0,0,.7);
     animation: splashPop .5s cubic-bezier(.2, 1.4, .4, 1);
     clip-path: polygon(22px 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%, 0 22px);
   }
@@ -706,7 +712,7 @@
   .splash .corner {
     position: absolute;
     width: 28px; height: 28px;
-    border-color: var(--green);
+    border-color: var(--red);
     border-style: solid;
   }
   .splash .c1 { top: 8px; left: 8px; border-width: 3px 0 0 3px; }
@@ -719,8 +725,8 @@
     font-size: .7rem;
     letter-spacing: .35em;
     text-transform: uppercase;
-    color: #0a0f0c;
-    background: var(--green);
+    color: #fff;
+    background: var(--red);
     font-weight: 700;
     padding: 6px 16px;
     margin-bottom: 18px;
@@ -734,7 +740,7 @@
     line-height: 1.3;
     margin-bottom: 12px;
   }
-  .splash h3 span { color: var(--green); }
+  .splash h3 span { color: var(--red); }
   .splash .msg {
     color: var(--text);
     font-size: 1.02rem;
@@ -742,6 +748,39 @@
     margin-bottom: 24px;
   }
   .splash .msg strong { color: var(--green); }
+  .splash .msg strong.bad-txt { color: var(--red); }
+
+  /* Evidencia del regalo vencido */
+  .evidence {
+    margin: 0 auto 22px;
+    max-width: 340px;
+    border: 2px solid var(--red);
+    background: #050807;
+    padding: 6px;
+    box-shadow: 0 0 22px rgba(255,77,77,.35);
+    transform: rotate(-1.2deg);
+    position: relative;
+  }
+  .evidence::before {
+    content: "EVIDENCIA";
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--red);
+    color: #fff;
+    font-size: .6rem;
+    font-weight: 700;
+    letter-spacing: .3em;
+    padding: 3px 12px;
+    z-index: 2;
+  }
+  .evidence img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
 
   /* Barras de probabilidad */
   .prob {
@@ -798,6 +837,15 @@
     padding: 8px 16px;
   }
   .splash-status .dot { animation: pulse 1.4s infinite; }
+  .splash-status.bad-status {
+    color: var(--red);
+    border-color: rgba(255,77,77,.5);
+    background: rgba(255,77,77,.08);
+  }
+  .splash-status.bad-status .dot {
+    background: var(--red);
+    box-shadow: 0 0 10px var(--red);
+  }
 
   /* Pista del envoltorio */
   .clue {
@@ -843,8 +891,8 @@
     display: block;
     width: 100%;
     margin-top: 24px;
-    background: var(--green);
-    color: #0a0f0c;
+    background: var(--red);
+    color: #fff;
     border: none;
     font-family: 'Black Ops One', cursive;
     font-size: .95rem;
@@ -857,7 +905,8 @@
   }
   .splash-btn:hover {
     background: #fff;
-    box-shadow: 0 0 24px rgba(63,255,122,.6);
+    color: var(--red);
+    box-shadow: 0 0 24px rgba(255,77,77,.6);
   }
 
   footer {
@@ -881,22 +930,27 @@
     <span class="corner c4"></span>
 
     <div class="splash-badge">Informe de misión</div>
-    <h3>¡Vas por <span>buen camino</span>, amigo secreto!</h3>
+    <h3>Acabo de <span>cambiar de parecer</span></h3>
     <p class="msg">
-      El primer regalo ya fue entregado y la aceptación hasta el momento es
-      <strong>positiva</strong>. Sigue así: el premio se acerca…
+      Mereces un <strong>30% bueno</strong> y un <strong class="bad-txt">70% malo</strong>.
+      Esto motivado a que uno de los regalos estaba <strong class="bad-txt">expirado</strong>:
+      en el <strong>Departamento de Evaluación</strong> no toleramos vencidos.
     </p>
 
-    <div class="prob good">
-      <div class="prob-row"><span>Regalo bueno</span><span class="pct">90%</span></div>
-      <div class="prob-track"><div class="prob-fill" style="--w:90%"></div></div>
-    </div>
-    <div class="prob bad">
-      <div class="prob-row"><span>Regalo malo</span><span class="pct">10%</span></div>
-      <div class="prob-track"><div class="prob-fill" style="--w:10%"></div></div>
+    <div class="evidence">
+      <img src="evidencia/vencido.png" alt="Evidencia: regalo vencido">
     </div>
 
-    <div class="splash-status"><span class="dot"></span> Aceptación positiva · En curso</div>
+    <div class="prob good">
+      <div class="prob-row"><span>Regalo bueno</span><span class="pct">30%</span></div>
+      <div class="prob-track"><div class="prob-fill" style="--w:30%"></div></div>
+    </div>
+    <div class="prob bad">
+      <div class="prob-row"><span>Regalo malo</span><span class="pct">70%</span></div>
+      <div class="prob-track"><div class="prob-fill" style="--w:70%"></div></div>
+    </div>
+
+    <div class="splash-status bad-status"><span class="dot"></span> Aceptación negativa · Regalo expirado</div>
 
     <div class="clue">
       <span class="clue-label"><svg class="ico" viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg> Pista confidencial</span>
