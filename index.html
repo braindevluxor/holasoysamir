@@ -251,6 +251,43 @@
     text-transform: uppercase;
     color: #333;
   }
+
+  /* Logo ya utilizado (regalo entregado) */
+  .chip-logo.used {
+    position: relative;
+    filter: grayscale(.85);
+    opacity: .62;
+  }
+  .chip-logo.used:hover { transform: none; box-shadow: none; filter: grayscale(.6); opacity: .8; }
+  .chip-logo.used::before,
+  .chip-logo.used::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    width: 80%;
+    height: 5px;
+    background: var(--red);
+    box-shadow: 0 0 10px rgba(255,77,77,.9);
+    border-radius: 3px;
+    z-index: 2;
+  }
+  .chip-logo.used::before { transform: translateY(-50%) rotate(28deg); }
+  .chip-logo.used::after { transform: translateY(-50%) rotate(-28deg); }
+  .chip-logo.used .used-tag {
+    position: absolute;
+    top: -9px;
+    right: -7px;
+    z-index: 3;
+    background: var(--red);
+    color: #fff;
+    font-size: .58rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  }
   .chip:hover {
     background: rgba(63,255,122,.12);
     border-color: var(--green-dim);
@@ -762,6 +799,46 @@
   }
   .splash-status .dot { animation: pulse 1.4s infinite; }
 
+  /* Pista del envoltorio */
+  .clue {
+    margin-top: 20px;
+    text-align: left;
+    background: rgba(255,179,71,.07);
+    border: 1px dashed rgba(255,179,71,.55);
+    padding: 14px 16px;
+    position: relative;
+  }
+  .clue-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+  .clue p {
+    color: var(--text);
+    font-size: .95rem;
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .clue p strong { color: var(--amber); font-style: normal; }
+  .clue .dept {
+    display: inline-block;
+    margin-top: 9px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.5rem;
+    letter-spacing: .3em;
+    color: #0a0f0c;
+    background: var(--amber);
+    padding: 5px 14px 5px 18px;
+    font-weight: 700;
+    clip-path: polygon(9px 0, 100% 0, calc(100% - 9px) 100%, 0 100%);
+  }
+
   .splash-btn {
     display: block;
     width: 100%;
@@ -821,6 +898,12 @@
 
     <div class="splash-status"><span class="dot"></span> Aceptación positiva · En curso</div>
 
+    <div class="clue">
+      <span class="clue-label"><svg class="ico" viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg> Pista confidencial</span>
+      <p>El <strong>envoltorio del regalo</strong> lleva una pista: revela el <strong>departamento</strong> donde posiblemente te encuentras…</p>
+      <span class="dept">?????</span>
+    </div>
+
     <button class="splash-btn" id="splashBtn">Entrar al dossier</button>
   </div>
 </div>
@@ -878,9 +961,9 @@
   <!-- VIERNES -->
   <section class="card friday">
     <h2><span class="icon"><svg class="ico" viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h1a2 2 0 0 0 2-2V2"/><path d="M6 2v20"/><path d="M18 2c-1.7 1.2-3 3.2-3 6v4h4"/><path d="M19 12v10"/></svg></span> Regalo de los viernes</h2>
-    <p style="margin-bottom:14px;">Cada viernes el combo perfecto es <strong style="color:var(--amber)">snack salado</strong>. ¡Doritos y compañía son bienvenidos!</p>
+    <p style="margin-bottom:14px;">Cada viernes el combo perfecto es <strong style="color:var(--amber)">snack salado</strong>. ¡Takis y compañía son bienvenidos!</p>
     <div class="chips logos">
-      <span class="chip-logo"><img src="logos/doritos.png" alt="Doritos"><small>Doritos</small></span>
+      <span class="chip-logo used"><span class="used-tag">Entregado</span><img src="logos/doritos.png" alt="Regalo entregado"><small>Regalo #1</small></span>
       <span class="chip-logo"><img src="logos/takis.webp" alt="Takis"><small>Takis</small></span>
       <span class="chip-logo"><img src="logos/cheetos.webp" alt="Cheetos"><small>Cheetos</small></span>
       <span class="chip-logo"><img src="logos/ruffles.svg" alt="Ruffles"><small>Papas Ruffles</small></span>
@@ -899,7 +982,7 @@
       </div>
       <div class="tier t2">
         <div class="tier-label">Viernes</div>
-        <div class="tier-desc"><strong style="color:#fff">Doritos u otros snacks</strong> de este estilo (Takis, Cheetos, papas, etc.).</div>
+        <div class="tier-desc"><strong style="color:#fff">Snacks salados</strong> de este estilo (Takis, Cheetos, papas, etc.).</div>
       </div>
       <div class="tier t3">
         <div class="tier-label">Comodín</div>
