@@ -750,7 +750,7 @@
   .splash .msg strong { color: var(--green); }
   .splash .msg strong.bad-txt { color: var(--red); }
 
-  /* Evidencia del regalo vencido */
+  /* Evidencia / estado del regalo */
   .evidence {
     margin: 0 auto 22px;
     max-width: 340px;
@@ -762,7 +762,7 @@
     position: relative;
   }
   .evidence::before {
-    content: "EVIDENCIA";
+    content: "PENDIENTE";
     position: absolute;
     top: -11px;
     left: 50%;
@@ -780,6 +780,44 @@
     width: 100%;
     max-width: 100%;
     height: auto;
+  }
+
+  /* Panel de regalo en cuarentena (pendiente de inspección) */
+  .evidence .pending {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    padding: 26px 16px 22px;
+    background:
+      repeating-linear-gradient(45deg, rgba(255,77,77,.06) 0 10px, transparent 10px 20px),
+      #050807;
+  }
+  .evidence .pending-tag {
+    font-size: .64rem;
+    font-weight: 700;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--amber);
+    padding: 5px 14px;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  }
+  .evidence .pending-code {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(1.4rem, 5vw, 1.9rem);
+    font-weight: 700;
+    letter-spacing: .18em;
+    color: var(--red);
+    text-shadow: 0 0 16px rgba(255,77,77,.6);
+    animation: urgentPulse 1.6s ease-in-out infinite;
+  }
+  .evidence .pending-note {
+    font-size: .74rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
 
   /* Barras de probabilidad */
@@ -887,6 +925,50 @@
     clip-path: polygon(9px 0, 100% 0, calc(100% - 9px) 100%, 0 100%);
   }
 
+  /* Incentivo: invitación al arcade */
+  .arcade-invite {
+    margin-top: 18px;
+    text-align: left;
+    background:
+      repeating-linear-gradient(45deg, rgba(63,255,122,.05) 0 10px, transparent 10px 20px),
+      rgba(63,255,122,.06);
+    border: 1px dashed var(--green-dim);
+    padding: 16px;
+    position: relative;
+  }
+  .arcade-invite .clue-label { color: var(--green); }
+  .arcade-invite p {
+    color: var(--text);
+    font-size: .95rem;
+    line-height: 1.6;
+  }
+  .arcade-invite p strong { color: var(--green); }
+  .arcade-invite .prize {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 11px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .95rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: #0a0f0c;
+    background: var(--green);
+    padding: 6px 14px;
+    clip-path: polygon(9px 0, 100% 0, calc(100% - 9px) 100%, 0 100%);
+    cursor: pointer;
+    transition: all .2s;
+    border: none;
+    font-family: 'Share Tech Mono', monospace;
+  }
+  .arcade-invite .prize:hover {
+    background: #fff;
+    color: var(--green-dim);
+    box-shadow: 0 0 22px rgba(63,255,122,.7);
+    transform: translateY(-2px);
+  }
+  .arcade-invite .prize .ico { animation: pulse 1.4s infinite; }
+
   .splash-btn {
     display: block;
     width: 100%;
@@ -909,6 +991,245 @@
     box-shadow: 0 0 24px rgba(255,77,77,.6);
   }
 
+  /* ---------- JUEGO DE TIRO ---------- */
+  .game-card { border-left-color: var(--amber); }
+  .game-card:hover { border-left-color: var(--amber); }
+  .game-card::after { border-color: rgba(255,179,71,.5); }
+  .game-card h2 { color: var(--amber); }
+  .game-card li::before { color: var(--amber); }
+  .game-card.highlight {
+    border-color: var(--green);
+    border-left-color: var(--green);
+    box-shadow: 0 0 0 1px var(--green), 0 0 34px rgba(63,255,122,.45);
+    transform: translateY(-3px);
+    transition: all .4s ease;
+  }
+  .game-card.highlight::after { border-color: var(--green); opacity: 1; }
+
+  .game-launch {
+    display: inline-block;
+    margin-top: 18px;
+    background: var(--amber);
+    color: #0a0f0c;
+    border: none;
+    font-family: 'Black Ops One', cursive;
+    font-size: .95rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    cursor: pointer;
+    clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+    transition: all .2s;
+  }
+  .game-launch:hover {
+    background: #fff;
+    color: var(--amber);
+    box-shadow: 0 0 26px rgba(255,179,71,.6);
+  }
+
+  .game-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 950;
+    background: rgba(4,7,5,.97);
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    overflow-y: auto;
+  }
+  .game-overlay.show { display: flex; animation: splashIn .3s ease; }
+
+  .game-panel {
+    position: relative;
+    width: min(880px, 100%);
+    background: var(--panel);
+    border: 2px solid var(--amber);
+    box-shadow: 0 0 55px rgba(255,179,71,.28), 0 24px 60px rgba(0,0,0,.7);
+    clip-path: polygon(22px 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%, 0 22px);
+    animation: splashPop .4s cubic-bezier(.2, 1.4, .4, 1);
+  }
+
+  .game-hud {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 18px;
+    padding: 13px 18px;
+    background: rgba(255,179,71,.08);
+    border-bottom: 2px solid var(--line);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .95rem;
+    letter-spacing: .12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .game-hud b { color: var(--amber); font-size: 1.3rem; letter-spacing: .05em; }
+  .game-hud .goal { color: var(--green); font-size: .95rem; }
+  .game-hud .game-hint {
+    flex: 1;
+    font-size: .7rem;
+    letter-spacing: .08em;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .game-exit {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid var(--red);
+    color: var(--red);
+    font-family: 'Black Ops One', cursive;
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all .2s;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  }
+  .game-exit:hover { background: var(--red); color: #fff; }
+
+  .game-field {
+    position: relative;
+    height: min(58vh, 440px);
+    min-height: 300px;
+    background:
+      linear-gradient(rgba(255,179,71,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,179,71,.05) 1px, transparent 1px),
+      #050807;
+    background-size: 36px 36px;
+    overflow: hidden;
+    cursor: crosshair;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .target {
+    position: absolute;
+    padding: 0;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    background:
+      radial-gradient(circle, #fff 0 16%, var(--red) 16% 38%, #fff 38% 58%, var(--red) 58% 78%, #fff 78% 100%);
+    box-shadow: 0 0 18px rgba(255,77,77,.75);
+    transform: translate(-50%, -50%) scale(0);
+    animation: targetIn .16s ease-out forwards;
+    cursor: crosshair;
+    z-index: 2;
+  }
+  @keyframes targetIn { to { transform: translate(-50%, -50%) scale(1); } }
+  .target.pop {
+    animation: targetPop .16s ease-out forwards;
+    pointer-events: none;
+  }
+  @keyframes targetPop {
+    to { transform: translate(-50%, -50%) scale(1.7); opacity: 0; }
+  }
+  .target.missed {
+    border-color: var(--muted);
+    background: radial-gradient(circle, var(--muted) 0 30%, transparent 32%);
+    box-shadow: none;
+    opacity: .45;
+    animation: none;
+    transform: translate(-50%, -50%) scale(1);
+    transition: opacity .2s;
+  }
+
+  .float-score {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    font-family: 'Share Tech Mono', monospace;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--green);
+    text-shadow: 0 0 10px rgba(63,255,122,.9);
+    pointer-events: none;
+    z-index: 3;
+    animation: floatUp .7s ease-out forwards;
+  }
+  @keyframes floatUp {
+    to { transform: translate(-50%, -220%); opacity: 0; }
+  }
+
+  .game-win {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: rgba(4,7,5,.95);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 12px;
+    padding: 26px 20px;
+  }
+  .game-win.show { display: flex; animation: splashIn .35s ease; }
+  .win-badge {
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    color: #0a0f0c;
+    background: var(--green);
+    padding: 6px 16px;
+    clip-path: polygon(9px 0, 100% 0, calc(100% - 9px) 100%, 0 100%);
+  }
+  .game-win h3 {
+    font-family: 'Black Ops One', cursive;
+    font-size: clamp(1.2rem, 5vw, 1.7rem);
+    color: #fff;
+    letter-spacing: .06em;
+  }
+  .game-win p { font-size: .98rem; color: var(--text); max-width: 560px; }
+  .code-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(1.5rem, 7vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: .28em;
+    padding: 12px 22px 12px 30px;
+    color: #0a0f0c;
+    background: var(--green);
+    box-shadow: 0 0 34px rgba(63,255,122,.65);
+    clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+    user-select: all;
+    -webkit-user-select: all;
+  }
+  .win-note { color: var(--muted) !important; font-size: .9rem !important; }
+  .win-note strong { color: var(--amber); }
+  .win-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 8px;
+  }
+  .win-actions .game-launch { margin-top: 0; }
+  .game-again {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-family: 'Black Ops One', cursive;
+    font-size: .85rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 14px 24px;
+    cursor: pointer;
+    clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+    transition: all .2s;
+  }
+  .game-again:hover { border-color: var(--green); color: var(--green); }
+
+  @media (max-width: 560px) {
+    .game-field { height: 54vh; min-height: 260px; }
+    .game-hud { font-size: .8rem; gap: 6px 12px; padding: 10px 12px; }
+    .game-hud b { font-size: 1.1rem; }
+    .game-hud .game-hint { display: none; }
+    .game-exit { margin-left: auto; }
+  }
+
   footer {
     text-align: center;
     margin-top: 40px;
@@ -929,36 +1250,78 @@
     <span class="corner c3"></span>
     <span class="corner c4"></span>
 
-    <div class="splash-badge">Informe de misión</div>
-    <h3>Acabo de <span>cambiar de parecer</span></h3>
+    <div class="splash-badge">Comunicado oficial</div>
+    <h3>Han ofrecido una <span>disculpa</span></h3>
     <p class="msg">
-      Mereces un <strong>30% bueno</strong> y un <strong class="bad-txt">70% malo</strong>.
-      Esto motivado a que uno de los regalos estaba <strong class="bad-txt">expirado</strong>:
-      en el <strong>Departamento de Evaluación</strong> no toleramos vencidos.
+      Hoy me dejaron un regalo que <strong>no pude revisar</strong>: andaba en el
+      <strong>círculo militar</strong> en labores de inteligencia. El regalo será
+      <strong>inspeccionado el lunes</strong>. Mientras tanto, la puntuación sube a
+      <strong>60% bueno</strong> y <strong class="bad-txt">40% malo</strong>, hasta que se revise.
     </p>
 
     <div class="evidence">
-      <img src="evidencia/vencido.png" alt="Evidencia: regalo vencido">
+      <div class="pending">
+        <span class="pending-tag">Regalo en cuarentena</span>
+        <span class="pending-code">INSPECCIÓN · LUNES</span>
+        <span class="pending-note">Clasificado · no abierto en labores de inteligencia</span>
+      </div>
     </div>
 
     <div class="prob good">
-      <div class="prob-row"><span>Regalo bueno</span><span class="pct">30%</span></div>
-      <div class="prob-track"><div class="prob-fill" style="--w:30%"></div></div>
+      <div class="prob-row"><span>Regalo bueno</span><span class="pct">60%</span></div>
+      <div class="prob-track"><div class="prob-fill" style="--w:60%"></div></div>
     </div>
     <div class="prob bad">
-      <div class="prob-row"><span>Regalo malo</span><span class="pct">70%</span></div>
-      <div class="prob-track"><div class="prob-fill" style="--w:70%"></div></div>
+      <div class="prob-row"><span>Regalo malo</span><span class="pct">40%</span></div>
+      <div class="prob-track"><div class="prob-fill" style="--w:40%"></div></div>
     </div>
 
-    <div class="splash-status bad-status"><span class="dot"></span> Aceptación negativa · Regalo expirado</div>
+    <div class="splash-status"><span class="dot"></span> Aceptación condicional · Revisión el lunes</div>
 
     <div class="clue">
       <span class="clue-label"><svg class="ico" viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg> Pista confidencial</span>
       <p>El <strong>envoltorio del regalo</strong> lleva una pista: revela el <strong>departamento</strong> donde posiblemente te encuentras…</p>
-      <span class="dept">?????</span>
+      <p style="margin-top:12px;">Además, analizando el estilo: <strong>la manera de escribir denota abuso de la IA</strong>. El sospechoso redacta con lenguaje sospechosamente estructurado y pulido… <strong>¿o fue la propia IA quien envió el regalo?</strong></p>
+    </div>
+
+    <!-- INVITACIÓN AL ARCADE -->
+    <div class="arcade-invite">
+      <span class="clue-label"><svg class="ico" viewBox="0 0 24 24"><line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/><line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/><rect x="2" y="6" width="20" height="12" rx="4"/></svg> Arcade · Campo de tiro</span>
+      <p>
+        <strong>¡Invitación al amigo secreto!</strong> Ponte a prueba en mi
+        <strong>campo de tiro</strong>: los objetivos aparecen cada vez más rápido.
+        Alcanza los <strong>1000 puntos</strong> y desbloquearás un código clasificado
+        que deberás poner en mi <strong>próximo regalo</strong>…
+      </p>
+      <button class="prize" id="prizeBtn" type="button"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></svg> PLUS EN EL REGALO FINAL</button>
     </div>
 
     <button class="splash-btn" id="splashBtn">Entrar al dossier</button>
+  </div>
+</div>
+
+<!-- JUEGO DE TIRO -->
+<div class="game-overlay" id="gameOverlay">
+  <div class="game-panel">
+    <div class="game-hud">
+      <span>Puntos <b id="gScore">0</b> <span class="goal">/ 1000</span></span>
+      <span>Nivel <b id="gLevel">1</b></span>
+      <span class="game-hint">Los objetivos aparecen más rápido según sube tu puntaje</span>
+      <button class="game-exit" id="gExit">Abandonar</button>
+    </div>
+    <div class="game-field" id="gField">
+      <div class="game-win" id="gWin">
+        <span class="win-badge">Código desbloqueado</span>
+        <h3>¡1000 PUNTOS!</h3>
+        <p>Entrega este código al amigo secreto para que lo ponga en tu <strong>próximo regalo</strong>…</p>
+        <div class="code-badge" id="gCode">N4V1D4D27</div>
+        <p class="win-note">…y tendrás un <strong>PLUS en tu regalo final</strong>.</p>
+        <div class="win-actions">
+          <button class="game-launch" id="gReplay">Jugar otra vez</button>
+          <button class="game-again" id="gClose">Cerrar</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1085,6 +1448,14 @@
     </div>
   </section>
 
+  <!-- JUEGO DE TIRO -->
+  <section class="card game-card">
+    <h2><span class="icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/></svg></span> Campo de tiro</h2>
+    <p style="margin-bottom:6px;">Entrenamiento táctico: los objetivos aparecerán cada vez <strong style="color:var(--amber)">más rápido</strong>. Demuestra tu puntería y alcanza <strong style="color:#fff">1000 puntos</strong> para desbloquear el código clasificado.</p>
+    <p class="muted" style="margin-bottom:4px;">Al llegar a 1000 puntos aparecerá un código que el amigo secreto deberá poner en tu próximo regalo… y tendrás un plus en tu regalo final.</p>
+    <button class="game-launch" id="gameLaunch">Iniciar campo de tiro</button>
+  </section>
+
   <!-- MEMES -->
   <section class="card memes">
     <h2><span class="icon"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg></span> Memes del amigo secreto</h2>
@@ -1092,21 +1463,19 @@
 
     <div class="carousel" id="carousel">
       <div class="slide active"><img src="meme%201.jpg" alt="Meme 1" loading="lazy"></div>
-      <div class="slide"><img src="meme%202.jpg" alt="Meme 2" loading="lazy"></div>
+      <div class="slide"><img src="meme%202.webp" alt="Meme 2" loading="lazy"></div>
       <div class="slide"><img src="meme%203.jpg" alt="Meme 3" loading="lazy"></div>
       <div class="slide"><img src="meme%204.jpg" alt="Meme 4" loading="lazy"></div>
       <div class="slide"><img src="meme%205.jpg" alt="Meme 5" loading="lazy"></div>
-      <div class="slide"><img src="meme%206.jpg" alt="Meme 6" loading="lazy"></div>
+      <div class="slide"><img src="meme%206.png" alt="Meme 6" loading="lazy"></div>
       <div class="slide"><img src="meme%207.jpg" alt="Meme 7" loading="lazy"></div>
-      <div class="slide"><img src="meme%208.avif" alt="Meme 8" loading="lazy"></div>
-      <div class="slide"><img src="meme%209.jpg" alt="Meme 9" loading="lazy"></div>
-      <div class="slide"><img src="meme%2010.jpg" alt="Meme 10" loading="lazy"></div>
-      <div class="slide"><img src="meme%2011.jpg" alt="Meme 11" loading="lazy"></div>
-      <div class="slide"><img src="meme%2012.jpg" alt="Meme 12" loading="lazy"></div>
+      <div class="slide"><img src="meme%208.png" alt="Meme 8" loading="lazy"></div>
+      <div class="slide"><img src="meme%209.png" alt="Meme 9" loading="lazy"></div>
+      <div class="slide"><img src="meme%2011.jpg" alt="Meme 10" loading="lazy"></div>
 
       <button class="car-btn car-prev" id="prevBtn" aria-label="Anterior"><svg class="ico" viewBox="0 0 24 24" style="width:1.2em;height:1.2em;"><path d="m15 18-6-6 6-6"/></svg></button>
       <button class="car-btn car-next" id="nextBtn" aria-label="Siguiente"><svg class="ico" viewBox="0 0 24 24" style="width:1.2em;height:1.2em;"><path d="m9 18 6-6-6-6"/></svg></button>
-      <div class="car-counter" id="counter">01 / 12</div>
+      <div class="car-counter" id="counter">01 / 10</div>
     </div>
 
     <div class="dots" id="dots"></div>
@@ -1134,6 +1503,7 @@
     setTimeout(function () { splash.remove(); }, 500);
     document.body.style.overflow = '';
   }
+  window.__splashClose = close;
 
   btn.addEventListener('click', close);
   document.addEventListener('keydown', function (e) {
@@ -1261,6 +1631,160 @@
 
   tick();
   setInterval(tick, 1000);
+})();
+</script>
+
+<script>
+/* ---------- CAMPO DE TIRO ---------- */
+(function () {
+  var GOAL = 1000;
+  var POINTS = 10;          // puntos por objetivo
+  var launchBtn = document.getElementById('gameLaunch');
+  var overlay = document.getElementById('gameOverlay');
+  var field = document.getElementById('gField');
+  var scoreEl = document.getElementById('gScore');
+  var levelEl = document.getElementById('gLevel');
+  var winEl = document.getElementById('gWin');
+
+  var score = 0;
+  var running = false;
+  var spawnTimer = null;
+  var targets = [];         // {el, dieTimer}
+  var level = 1;
+
+  /* Dificultad: más puntos => aparecen más rápido y viven menos */
+  function spawnDelay() {
+    return Math.max(320, 1150 - score * 0.8);
+  }
+  function lifeTime() {
+    return Math.max(800, 2400 - score * 1.5);
+  }
+  function updateLevel() {
+    level = Math.min(5, 1 + Math.floor(score / 250));
+    levelEl.textContent = level;
+  }
+
+  function clearTargets() {
+    targets.forEach(function (t) {
+      clearTimeout(t.dieTimer);
+      if (t.el.parentNode) t.el.parentNode.removeChild(t.el);
+    });
+    targets = [];
+  }
+
+  function spawn() {
+    if (!running) return;
+
+    var size = Math.max(38, 74 - score * 0.035);   // se encoge al subir puntos
+    var x = Math.random() * (field.clientWidth - size - 12) + 6;
+    var y = Math.random() * (field.clientHeight - size - 12) + 6;
+
+    var t = document.createElement('div');
+    t.className = 'target';
+    t.style.width = size + 'px';
+    t.style.height = size + 'px';
+    t.style.left = x + 'px';
+    t.style.top = y + 'px';
+    field.appendChild(t);
+
+    var rec = { el: t, dead: false };
+
+    rec.dieTimer = setTimeout(function () {
+      if (rec.dead) return;
+      rec.dead = true;
+      t.classList.add('missed');
+      setTimeout(function () {
+        if (t.parentNode) t.parentNode.removeChild(t);
+      }, 200);
+      // elimina del array
+      targets = targets.filter(function (r) { return r !== rec; });
+    }, lifeTime());
+
+    function hit(e) {
+      e.stopPropagation();
+      if (rec.dead || !running) return;
+      rec.dead = true;
+      clearTimeout(rec.dieTimer);
+      targets = targets.filter(function (r) { return r !== rec; });
+
+      // flotante +puntos
+      var f = document.createElement('span');
+      f.className = 'float-score';
+      f.textContent = '+' + POINTS;
+      f.style.left = x + size / 2 + 'px';
+      f.style.top = y + size / 2 + 'px';
+      field.appendChild(f);
+      setTimeout(function () { if (f.parentNode) f.parentNode.removeChild(f); }, 750);
+
+      t.classList.add('pop');
+      setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 180);
+
+      score += POINTS;
+      scoreEl.textContent = score;
+      updateLevel();
+      if (score >= GOAL) win();
+    }
+
+    t.addEventListener('click', hit);
+    targets.push(rec);
+
+    spawnTimer = setTimeout(spawn, spawnDelay());
+  }
+
+  function win() {
+    running = false;
+    clearTimeout(spawnTimer);
+    clearTargets();
+    winEl.classList.add('show');
+  }
+
+  function loopStop() {
+    running = false;
+    clearTimeout(spawnTimer);
+    clearTargets();
+  }
+
+  function startGame() {
+    loopStop();
+    score = 0;
+    level = 1;
+    scoreEl.textContent = '0';
+    levelEl.textContent = '1';
+    winEl.classList.remove('show');
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    running = true;
+    spawn();
+  }
+
+  function exitGame() {
+    loopStop();
+    winEl.classList.remove('show');
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  launchBtn.addEventListener('click', startGame);
+  document.getElementById('gExit').addEventListener('click', exitGame);
+  document.getElementById('gClose').addEventListener('click', exitGame);
+  document.getElementById('gReplay').addEventListener('click', startGame);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('show')) exitGame();
+  });
+
+  /* Botón PLUS en el splash: cierra el splash y lleva a la sección Campo de tiro */
+  var prizeBtn = document.getElementById('prizeBtn');
+  var gameCard = document.querySelector('.game-card');
+  if (prizeBtn && gameCard) {
+    prizeBtn.addEventListener('click', function () {
+      if (window.__splashClose) window.__splashClose();
+      setTimeout(function () {
+        gameCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        gameCard.classList.add('highlight');
+        setTimeout(function () { gameCard.classList.remove('highlight'); }, 2400);
+      }, 200);
+    });
+  }
 })();
 </script>
 
