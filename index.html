@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Samir · Perfil Amigo Secreto</title>
+<title>Samir · Perfil Amigo Secreto · Operación Navidad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -47,13 +47,29 @@
       var(--panel);
     overflow: hidden;
   }
+  /* Cinta táctica rojo/verde (estilo cinta de misión navideña) */
   header::before {
     content: "";
     position: absolute;
     top: 0; left: 0; right: 0;
-    height: 4px;
-    background: repeating-linear-gradient(90deg, var(--green) 0 18px, transparent 18px 36px);
-    opacity: .7;
+    height: 5px;
+    background: repeating-linear-gradient(90deg, var(--red) 0 18px, var(--green) 18px 36px);
+    opacity: .8;
+  }
+  /* Guirnalda de luces en la base del encabezado */
+  header::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 5px;
+    background:
+      repeating-linear-gradient(90deg,
+        var(--red) 0 12px,
+        #ffffff 12px 18px,
+        var(--green) 18px 30px,
+        transparent 30px 44px);
+    opacity: .5;
+    pointer-events: none;
   }
 
   .badge {
@@ -74,7 +90,7 @@
     font-size: clamp(3.2rem, 11vw, 6rem);
     letter-spacing: .18em;
     color: var(--green);
-    text-shadow: 0 0 24px rgba(63,255,122,.55), 0 0 6px rgba(63,255,122,.7);
+    text-shadow: 0 0 24px rgba(63,255,122,.55), 0 0 6px rgba(63,255,122,.7), 0 0 48px rgba(255,77,77,.3);
     line-height: 1;
     text-transform: uppercase;
   }
@@ -1230,6 +1246,83 @@
     .game-exit { margin-left: auto; }
   }
 
+  /* ---------- TEMÁTICA NAVIDEÑA TÁCTICA ---------- */
+  /* Nieve ligera sobre todo el dossier */
+  .snow {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 180;
+    overflow: hidden;
+  }
+  .snow i {
+    position: absolute;
+    top: -12px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: .55;
+    animation: snowfall linear infinite;
+    box-shadow: 0 0 6px rgba(255,255,255,.7);
+  }
+  @keyframes snowfall {
+    0%   { transform: translate3d(0, -12px, 0); }
+    50%  { transform: translate3d(24px, 50vh, 0); }
+    100% { transform: translate3d(-12px, 105vh, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) { .snow { display: none; } }
+
+  /* Árboles navideños tácticos en el encabezado */
+  .tree {
+    position: absolute;
+    bottom: 14px;
+    width: clamp(58px, 11vw, 96px);
+    opacity: .16;
+    filter: drop-shadow(0 0 8px rgba(63,255,122,.5));
+    pointer-events: none;
+  }
+  .tree-left { left: clamp(8px, 4vw, 46px); }
+  .tree-right { right: clamp(8px, 4vw, 46px); transform: scaleX(-1); }
+  @media (max-width: 640px) { .tree { opacity: .1; width: 58px; bottom: 8px; } }
+
+  /* Cinta de caramelo (borde rojo/blanco) para el letreto de regalos */
+  .sign { border-color: rgba(255,77,77,.55); }
+  .sign-head {
+    background:
+      repeating-linear-gradient(45deg, rgba(255,77,77,.14) 0 12px, rgba(255,255,255,.05) 12px 24px),
+      rgba(63,255,122,.08);
+  }
+
+  /* Insignia navideña */
+  .badge.xmas {
+    border-color: rgba(255,77,77,.6);
+    background: linear-gradient(90deg, rgba(255,77,77,.16), rgba(63,255,122,.1));
+    color: #fff;
+  }
+
+  /* Briefing navideño */
+  .xmas-brief {
+    border-left-color: var(--red);
+    background:
+      radial-gradient(ellipse at 12% 0%, rgba(255,77,77,.1), transparent 55%),
+      var(--panel);
+  }
+  .xmas-brief:hover { border-left-color: var(--red); }
+  .xmas-brief::after { border-color: rgba(255,77,77,.5); }
+  .xmas-brief h2 { color: var(--red); }
+  .xmas-brief li::before { color: var(--red); }
+  .xmas-brief .tag-xmas {
+    display: inline-block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    color: #0a0f0c;
+    background: linear-gradient(90deg, var(--red), var(--amber));
+    padding: 5px 14px;
+    margin-bottom: 12px;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  }
+
   footer {
     text-align: center;
     margin-top: 40px;
@@ -1241,6 +1334,9 @@
 </style>
 </head>
 <body>
+
+<!-- NIEVE TÁCTICA -->
+<div class="snow" id="snow" aria-hidden="true"></div>
 
 <!-- SPLASH BIENVENIDA -->
 <div class="splash-overlay" id="splash">
@@ -1331,14 +1427,54 @@
     <span class="cd-time"><span id="cd-h">00</span><span class="blink">:</span><span id="cd-m">00</span><span class="blink">:</span><span id="cd-s">00</span></span>
     <span class="cd-verse">"El que siembra escasez, cosechará escasez" <b>· 2 Corintios 9:6 ·</b></span>
     <span class="cd-flag" id="fridayFlag"><svg class="ico" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> ¡Hoy es viernes!</span>
+    <span class="cd-flag show" style="background:var(--red);color:#fff;"><svg class="ico" viewBox="0 0 24 24" style="fill:currentColor;stroke:none;"><path d="M11 2h2v3.4l1.6-1.6 1.4 1.4-1.6 1.6H18v2h-3.6l1.6 1.6-1.4 1.4-1.6-1.6V12h-2V8.6L9.4 10.2 8 8.8l1.6-1.6H6v-2h3.6L8 3.6 9.4 2.2 11 3.8z"/></svg> Modo navideño</span>
   </div>
-  <div class="badge">Amigo Secreto · Dossier</div>
+  <div class="badge xmas">❄ Amigo Secreto · Operación Navidad</div>
+  <svg class="tree tree-left" viewBox="0 0 100 140" aria-hidden="true">
+    <polygon points="50,6 74,52 26,52" fill="#123f26" stroke="#3dff7a" stroke-width="3"/>
+    <polygon points="50,34 80,90 20,90" fill="#16512f" stroke="#3dff7a" stroke-width="3"/>
+    <polygon points="50,66 88,126 12,126" fill="#123f26" stroke="#3dff7a" stroke-width="3"/>
+    <rect x="44" y="126" width="12" height="12" fill="#7f948a"/>
+    <polygon points="50,0 53,6 59,7 54,11 56,17 50,14 44,17 46,11 41,7 47,6" fill="#ffb347"/>
+    <circle cx="38" cy="70" r="4" fill="#ff4d4d"/>
+    <circle cx="62" cy="44" r="4" fill="#ffb347"/>
+    <circle cx="55" cy="106" r="4" fill="#ff4d4d"/>
+    <circle cx="34" cy="112" r="4" fill="#3dff7a"/>
+  </svg>
+  <svg class="tree tree-right" viewBox="0 0 100 140" aria-hidden="true">
+    <polygon points="50,6 74,52 26,52" fill="#123f26" stroke="#3dff7a" stroke-width="3"/>
+    <polygon points="50,34 80,90 20,90" fill="#16512f" stroke="#3dff7a" stroke-width="3"/>
+    <polygon points="50,66 88,126 12,126" fill="#123f26" stroke="#3dff7a" stroke-width="3"/>
+    <rect x="44" y="126" width="12" height="12" fill="#7f948a"/>
+    <polygon points="50,0 53,6 59,7 54,11 56,17 50,14 44,17 46,11 41,7 47,6" fill="#ffb347"/>
+    <circle cx="62" cy="70" r="4" fill="#ff4d4d"/>
+    <circle cx="38" cy="44" r="4" fill="#ffb347"/>
+    <circle cx="45" cy="106" r="4" fill="#ff4d4d"/>
+    <circle cx="66" cy="112" r="4" fill="#3dff7a"/>
+  </svg>
   <h1>SAM<span>IR</span></h1>
   <div class="tagline">Juegos de mesa · Equipo táctico · Snacks</div>
-  <div class="status"><span class="dot"></span> Esperando mis regalos</div>
+  <div class="status"><span class="dot"></span> Esperando mis regalos · Modo navideño activo</div>
 </header>
 
 <main>
+
+  <!-- BRIEFING NAVIDEÑO -->
+  <section class="card xmas-brief">
+    <h2><span class="icon"><svg class="ico" viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></span> Briefing navideño</h2>
+    <span class="tag-xmas">MISIÓN: NAVIDAD · CÓDIGO ROJO</span>
+    <p style="margin-bottom:12px;">Este <strong style="color:#fff">25 de diciembre</strong> el frente queda en alerta máxima: el amigo secreto opera en modo festivo pero sigue bajo protocolo táctico. Mantén la disciplina, vigila el envoltorio y no bajes la guardia.</p>
+    <div class="grid-2">
+      <ul>
+        <li>Regalos entregados en <strong style="color:var(--green)">estado naval</strong> (sin vencidos)</li>
+        <li>Snacks de viernes con bandera roja/navideña</li>
+      </ul>
+      <ul>
+        <li>Campo de tiro operativo los 365 días</li>
+        <li>Código clasificado <strong style="color:var(--amber)">N4V1D4D27</strong> en juego</li>
+      </ul>
+    </div>
+  </section>
 
   <!-- ALERTA ALERGIA -->
   <section class="card alert">
@@ -1484,7 +1620,7 @@
 
 </main>
 
-<footer>Archivo confidencial · Amigo Secreto · Samir</footer>
+<footer>❄ Archivo confidencial · Amigo Secreto · Samir · Operación Navidad ❄</footer>
 
 <script>
 /* ---------- SPLASH ---------- */
@@ -1784,6 +1920,27 @@
         setTimeout(function () { gameCard.classList.remove('highlight'); }, 2400);
       }, 200);
     });
+  }
+})();
+</script>
+
+<script>
+/* ---------- NIEVE TÁCTICA ---------- */
+(function () {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var snow = document.getElementById('snow');
+  if (!snow) return;
+  var COUNT = 42;
+  for (var i = 0; i < COUNT; i++) {
+    var f = document.createElement('i');
+    var size = 2 + Math.random() * 4;
+    f.style.width = size + 'px';
+    f.style.height = size + 'px';
+    f.style.left = (Math.random() * 100) + '%';
+    f.style.opacity = (0.25 + Math.random() * 0.5).toFixed(2);
+    f.style.animationDuration = (7 + Math.random() * 12).toFixed(1) + 's';
+    f.style.animationDelay = (-Math.random() * 16).toFixed(1) + 's';
+    snow.appendChild(f);
   }
 })();
 </script>
