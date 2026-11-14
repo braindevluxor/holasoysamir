@@ -1271,38 +1271,120 @@
   }
   @media (prefers-reduced-motion: reduce) { .snow { display: none; } }
 
-  /* Botón de música navideña */
-  .xmas-music {
-    position: fixed;
-    left: 14px;
-    bottom: 14px;
-    z-index: 1000;
+  /* ---------- VIDEO VILLANICO NATO ---------- */
+  .video-card {
+    border-left-color: var(--red);
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,77,77,.1), transparent 60%),
+      var(--panel);
+    padding: 0;
+    overflow: hidden;
+  }
+  .video-card:hover { transform: none; border-left-color: var(--red); }
+  .video-card::after { border-color: rgba(255,77,77,.5); }
+  .video-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 14px;
+    padding: 18px 22px 14px;
+    border-bottom: 2px solid var(--line);
+    background:
+      repeating-linear-gradient(45deg, rgba(255,77,77,.07) 0 12px, transparent 12px 24px),
+      rgba(63,255,122,.05);
+  }
+  .video-head h2 { margin-bottom: 0; color: var(--red); }
+  .video-live {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(10, 15, 12, .92);
-    border: 1px solid var(--green-dim);
-    color: var(--green);
     font-family: 'Share Tech Mono', monospace;
     font-size: .78rem;
-    letter-spacing: .12em;
+    font-weight: 700;
+    letter-spacing: .18em;
     text-transform: uppercase;
-    padding: 9px 14px;
+    color: #fff;
+    background: var(--red);
+    padding: 5px 14px;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    animation: urgentPulse 1.4s ease-in-out infinite;
+  }
+  .video-wrap {
+    position: relative;
+    background: #000;
+    line-height: 0;
+  }
+  .video-wrap video {
+    display: block;
+    width: 100%;
+    max-height: 68vh;
+    object-fit: contain;
+    background: #000;
+  }
+  /* Botón de play grande superpuesto */
+  .video-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(76px, 15vw, 116px);
+    height: clamp(76px, 15vw, 116px);
+    border-radius: 50%;
+    background: rgba(10, 15, 12, .88);
+    border: 3px solid var(--red);
+    color: #fff;
     cursor: pointer;
-    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-    transition: all .2s;
-    box-shadow: 0 0 16px rgba(63,255,122,.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 34px rgba(255,77,77,.55), 0 10px 30px rgba(0,0,0,.6);
+    z-index: 5;
+    transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+    animation: playPulse 1.8s ease-in-out infinite;
+    padding: 0;
   }
-  .xmas-music:hover { background: var(--green); color: #0a0f0c; }
-  .xmas-music.off {
-    border-color: rgba(255,77,77,.6);
-    color: var(--red);
-    box-shadow: none;
+  @keyframes playPulse {
+    0%, 100% { box-shadow: 0 0 22px rgba(255,77,77,.45), 0 10px 30px rgba(0,0,0,.6); }
+    50%      { box-shadow: 0 0 48px rgba(255,77,77,.85), 0 10px 30px rgba(0,0,0,.6); }
   }
-  .xmas-music.off:hover { background: var(--red); color: #fff; }
-  .xmas-music .ico { width: 1.05em; height: 1.05em; }
+  .video-play:hover {
+    background: var(--red);
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+  .video-play svg {
+    width: 44%;
+    height: 44%;
+    fill: currentColor;
+    stroke: none;
+    margin-left: 8%;   /* centrado óptico del triángulo */
+  }
+  .video-play.hide { display: none; }
+  .video-hint {
+    padding: 12px 22px 16px;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+    letter-spacing: .04em;
+    border-top: 1px dashed var(--line);
+    line-height: 1.6;
+  }
+  .video-hint strong { color: var(--green); font-style: normal; }
+  .video-fallback {
+    display: none;
+    margin: 0;
+    padding: 10px 22px;
+    background: rgba(255,179,71,.1);
+    border-top: 1px dashed rgba(255,179,71,.5);
+    color: var(--amber);
+    font-size: .88rem;
+    letter-spacing: .05em;
+  }
+  .video-fallback.show { display: block; }
   @media (max-width: 560px) {
-    .xmas-music { left: 10px; bottom: 10px; font-size: .68rem; padding: 7px 11px; }
+    .video-head { padding: 14px 16px 12px; }
+    .video-head h2 { font-size: .95rem; }
+    .video-hint { padding: 10px 16px 14px; font-size: .85rem; }
   }
 
   /* Árboles navideños tácticos en el encabezado */
@@ -1371,12 +1453,6 @@
 
 <!-- NIEVE TÁCTICA -->
 <div class="snow" id="snow" aria-hidden="true"></div>
-
-<!-- MÚSICA NAVIDEÑA -->
-<button class="xmas-music" id="musicBtn" type="button" aria-pressed="true">
-  <svg class="ico" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-  <span id="musicLabel">Música ON</span>
-</button>
 
 <!-- SPLASH BIENVENIDA -->
 <div class="splash-overlay" id="splash">
@@ -1498,6 +1574,25 @@
 </header>
 
 <main>
+
+  <!-- VIDEO VILLANICO NATO -->
+  <section class="card video-card">
+    <div class="video-head">
+      <h2><span class="icon"><svg class="ico" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span> Villancico de la OTAN · 2024</h2>
+      <span class="video-live" id="videoLive"><span class="dot"></span> Enlace satelital activo</span>
+    </div>
+    <div class="video-wrap">
+      <video id="xmasVideo" controls playsinline preload="metadata"
+             src="video/Recordamos%20el%20villancico%20cantado%20por%20soldados%20de%20la%20OTAN%20en%202024.mp4">
+        Tu navegador no soporta el video.
+      </video>
+      <button class="video-play" id="videoPlay" type="button" aria-label="Reproducir video">
+        <svg viewBox="0 0 24 24"><polygon points="6 3 21 12 6 21 6 3"/></svg>
+      </button>
+    </div>
+    <p class="video-fallback" id="videoFallback">⚠ El navegador bloqueó la reproducción automática — pulsa ▶ en el reproductor para iniciarlo.</p>
+    <p class="video-hint">Interceptado por la unidad de inteligencia: <strong>soldados de la OTAN interpretando un villancico de Navidad (2024)</strong>. Se reproduce automáticamente al abrir el dossier… el enlace puede caerse en cualquier momento.</p>
+  </section>
 
   <!-- BRIEFING NAVIDEÑO -->
   <section class="card xmas-brief">
@@ -1986,134 +2081,73 @@
 </script>
 
 <script>
-/* ---------- MÚSICA NAVIDEÑA CHIPTUNE (Jingle Bells) ---------- */
+/* ---------- VIDEO VILLANICO: AUTOPLAY AL ABRIR ---------- */
 (function () {
-  var btn = document.getElementById('musicBtn');
-  var label = document.getElementById('musicLabel');
-  if (!btn || !label) return;
+  var v = document.getElementById('xmasVideo');
+  var fallback = document.getElementById('videoFallback');
+  var playBtn = document.getElementById('videoPlay');
+  if (!v) return;
 
-  var BEAT = 0.26;          // pulso base
-  var VOL = 0.10;           // volumen master
-  var FREQ = {
-    C3:130.81, D3:146.83, E3:164.81, F3:174.61, G3:196.00, A3:220.00,
-    C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392.00, A4:440.00,
-    C5:523.25, D5:587.33, E5:659.25, F5:698.46, G5:783.99
-  };
+  var started = false;
 
-  /* Coro de Jingle Bells: [nota, pulsos] — R = silencio */
-  var MEL = [
-    ['E4',1],['E4',1],['E4',2],                 // Jin-gle bells
-    ['E4',1],['E4',1],['E4',2],                 // Jin-gle bells
-    ['E4',1],['G4',1],['C5',1],['D5',1],        // jin-gle all the
-    ['E5',4],                                    // way
-    ['F5',1],['F5',1],['F5',1],['F5',1],['F5',1],['E5',1],['E5',2], // Oh what fun it is to ride
-    ['E5',1],['E5',1],['D5',1],['D5',1],['E5',1],['D5',1],['C5',4], // in a one-horse o-pen sleigh
-    ['R',2]
-  ];
-  /* Raíz del bajo por compás (4 pulsos): C C C C F C G C */
-  var BASS = ['C3','C3','C3','C3','F3','C3','G3','C3'];
-
-  var ctx = null, master = null, timer = null, muted = false;
-  try { muted = localStorage.getItem('xmasMusicMuted') === '1'; } catch (e) {}
-
-  function paint() {
-    label.textContent = muted ? 'Música OFF' : 'Música ON';
-    btn.classList.toggle('off', muted);
-    btn.setAttribute('aria-pressed', muted ? 'false' : 'true');
+  /* Sincroniza el botón grande con el estado real del video */
+  function paintPlayBtn() {
+    if (!playBtn) return;
+    playBtn.classList.toggle('hide', !v.paused && !v.ended);
   }
-
-  function ensureCtx() {
-    if (ctx) return;
-    var AC = window.AudioContext || window.webkitAudioContext;
-    if (!AC) { btn.style.display = 'none'; return; }
-    ctx = new AC();
-    master = ctx.createGain();
-    master.gain.value = muted ? 0 : VOL;
-    master.connect(ctx.destination);
-  }
-
-  function tone(freq, t, dur, type, vol) {
-    var o = ctx.createOscillator(), g = ctx.createGain();
-    o.type = type;
-    o.frequency.setValueAtTime(freq, t);
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.linearRampToValueAtTime(vol, t + 0.012);
-    if (dur > 0.1) g.gain.linearRampToValueAtTime(vol * 0.55, t + dur * 0.7);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g); g.connect(master);
-    o.start(t);
-    o.stop(t + dur + 0.03);
-  }
-
-  /* Programa un bucle completo desde el instante 'from' y devuelve su fin */
-  function scheduleLoop(from) {
-    var t = from, i;
-    for (i = 0; i < MEL.length; i++) {
-      var name = MEL[i][0], dur = MEL[i][1] * BEAT;
-      if (name !== 'R') tone(FREQ[name], t, dur * 0.94, 'square', 0.8);
-      t += dur;
-    }
-    var beats = Math.round((t - from) / BEAT);
-    var bt = from;
-    for (i = 0; i < beats; i++) {
-      tone(FREQ[BASS[Math.floor(i / 4) % BASS.length]], bt, BEAT * 0.45, 'triangle', 0.55);
-      bt += BEAT;
-    }
-    return t;
-  }
-
-  function armNext(from) {
-    var end = scheduleLoop(from);
-    /* margen de 1.5s para sobrevivir al throttle de timers en segundo plano */
-    var delay = Math.max((end - ctx.currentTime - 1.5) * 1000, 50);
-    timer = setTimeout(function () {
-      var start = end < ctx.currentTime + 0.05 ? ctx.currentTime + 0.05 : end;
-      armNext(start);
-    }, delay);
-  }
-
-  function start() {
-    ensureCtx();
-    if (!ctx || timer || muted) return;
-    if (ctx.state !== 'running') {
-      var p = ctx.resume();
-      if (p && p.then) {
-        p.then(function () { if (!timer && !muted) armNext(ctx.currentTime + 0.06); })
-         .catch(function () { /* bloqueado hasta el primer gesto */ });
-      }
-      return;
-    }
-    armNext(ctx.currentTime + 0.06);
-  }
-
-  function stop() {
-    if (timer) { clearTimeout(timer); timer = null; }
-    if (master && ctx) master.gain.setTargetAtTime(0, ctx.currentTime, 0.02);
-  }
-
-  paint();
-  start();   // intento de autoplay al abrir
-
-  /* Si el navegador bloquea el autoplay, arranca en el primer gesto */
-  ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) {
-    document.addEventListener(ev, function once() {
-      document.removeEventListener(ev, once);
-      start();
-    }, { once: true, passive: true });
+  v.addEventListener('play', paintPlayBtn);
+  v.addEventListener('pause', paintPlayBtn);
+  v.addEventListener('ended', function () {
+    if (playBtn) playBtn.classList.remove('hide');   // muestra ▶ al terminar
   });
+  paintPlayBtn();
 
-  btn.addEventListener('click', function () {
-    muted = !muted;
-    try { localStorage.setItem('xmasMusicMuted', muted ? '1' : '0'); } catch (e) {}
-    paint();
-    if (muted) {
-      stop();
+  function tryPlay() {
+    if (started) return;
+    var p = v.play();
+    if (p && p.then) {
+      p.then(function () {
+        started = true;
+        if (fallback) fallback.classList.remove('show');
+      }).catch(function () {
+        /* bloqueado: se reintenta en el primer gesto del usuario */
+      });
     } else {
-      if (master && ctx) master.gain.setTargetAtTime(VOL, ctx.currentTime, 0.02);
-      timer = null;            // fuerza reanudación limpia
-      start();
+      started = true;   // navegadores viejos sin promesas
     }
-  });
+  }
+
+  /* 1) Intento inmediato al abrir */
+  tryPlay();
+
+  /* 2) Si el navegador exige gesto, arranca en el primer clic/tecla */
+  function onGesture() {
+    tryPlay();
+    if (started) {
+      document.removeEventListener('pointerdown', onGesture);
+      document.removeEventListener('keydown', onGesture);
+      document.removeEventListener('touchstart', onGesture);
+    }
+  }
+  document.addEventListener('pointerdown', onGesture, { passive: true });
+  document.addEventListener('keydown', onGesture, { passive: true });
+  document.addEventListener('touchstart', onGesture, { passive: true });
+
+  /* 3) Botón grande: reproducir / reanudar */
+  if (playBtn) {
+    playBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      started = true;               // gesto explícito: ya no insistimos con autoplay
+      if (fallback) fallback.classList.remove('show');
+      v.play();
+      v.focus({ preventScroll: true });
+    });
+  }
+
+  /* 4) Aviso si aún así no arranca (autoplay bloqueado) */
+  setTimeout(function () {
+    if (!started && fallback) fallback.classList.add('show');
+  }, 2500);
 })();
 </script>
 
