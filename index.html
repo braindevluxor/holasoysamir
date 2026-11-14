@@ -1271,6 +1271,40 @@
   }
   @media (prefers-reduced-motion: reduce) { .snow { display: none; } }
 
+  /* Botón de música navideña */
+  .xmas-music {
+    position: fixed;
+    left: 14px;
+    bottom: 14px;
+    z-index: 1000;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(10, 15, 12, .92);
+    border: 1px solid var(--green-dim);
+    color: var(--green);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .78rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 9px 14px;
+    cursor: pointer;
+    clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    transition: all .2s;
+    box-shadow: 0 0 16px rgba(63,255,122,.25);
+  }
+  .xmas-music:hover { background: var(--green); color: #0a0f0c; }
+  .xmas-music.off {
+    border-color: rgba(255,77,77,.6);
+    color: var(--red);
+    box-shadow: none;
+  }
+  .xmas-music.off:hover { background: var(--red); color: #fff; }
+  .xmas-music .ico { width: 1.05em; height: 1.05em; }
+  @media (max-width: 560px) {
+    .xmas-music { left: 10px; bottom: 10px; font-size: .68rem; padding: 7px 11px; }
+  }
+
   /* Árboles navideños tácticos en el encabezado */
   .tree {
     position: absolute;
@@ -1337,6 +1371,12 @@
 
 <!-- NIEVE TÁCTICA -->
 <div class="snow" id="snow" aria-hidden="true"></div>
+
+<!-- MÚSICA NAVIDEÑA -->
+<button class="xmas-music" id="musicBtn" type="button" aria-pressed="true">
+  <svg class="ico" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+  <span id="musicLabel">Música ON</span>
+</button>
 
 <!-- SPLASH BIENVENIDA -->
 <div class="splash-overlay" id="splash">
@@ -1942,6 +1982,138 @@
     f.style.animationDelay = (-Math.random() * 16).toFixed(1) + 's';
     snow.appendChild(f);
   }
+})();
+</script>
+
+<script>
+/* ---------- MÚSICA NAVIDEÑA CHIPTUNE (Jingle Bells) ---------- */
+(function () {
+  var btn = document.getElementById('musicBtn');
+  var label = document.getElementById('musicLabel');
+  if (!btn || !label) return;
+
+  var BEAT = 0.26;          // pulso base
+  var VOL = 0.10;           // volumen master
+  var FREQ = {
+    C3:130.81, D3:146.83, E3:164.81, F3:174.61, G3:196.00, A3:220.00,
+    C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392.00, A4:440.00,
+    C5:523.25, D5:587.33, E5:659.25, F5:698.46, G5:783.99
+  };
+
+  /* Coro de Jingle Bells: [nota, pulsos] — R = silencio */
+  var MEL = [
+    ['E4',1],['E4',1],['E4',2],                 // Jin-gle bells
+    ['E4',1],['E4',1],['E4',2],                 // Jin-gle bells
+    ['E4',1],['G4',1],['C5',1],['D5',1],        // jin-gle all the
+    ['E5',4],                                    // way
+    ['F5',1],['F5',1],['F5',1],['F5',1],['F5',1],['E5',1],['E5',2], // Oh what fun it is to ride
+    ['E5',1],['E5',1],['D5',1],['D5',1],['E5',1],['D5',1],['C5',4], // in a one-horse o-pen sleigh
+    ['R',2]
+  ];
+  /* Raíz del bajo por compás (4 pulsos): C C C C F C G C */
+  var BASS = ['C3','C3','C3','C3','F3','C3','G3','C3'];
+
+  var ctx = null, master = null, timer = null, muted = false;
+  try { muted = localStorage.getItem('xmasMusicMuted') === '1'; } catch (e) {}
+
+  function paint() {
+    label.textContent = muted ? 'Música OFF' : 'Música ON';
+    btn.classList.toggle('off', muted);
+    btn.setAttribute('aria-pressed', muted ? 'false' : 'true');
+  }
+
+  function ensureCtx() {
+    if (ctx) return;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) { btn.style.display = 'none'; return; }
+    ctx = new AC();
+    master = ctx.createGain();
+    master.gain.value = muted ? 0 : VOL;
+    master.connect(ctx.destination);
+  }
+
+  function tone(freq, t, dur, type, vol) {
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(vol, t + 0.012);
+    if (dur > 0.1) g.gain.linearRampToValueAtTime(vol * 0.55, t + dur * 0.7);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(master);
+    o.start(t);
+    o.stop(t + dur + 0.03);
+  }
+
+  /* Programa un bucle completo desde el instante 'from' y devuelve su fin */
+  function scheduleLoop(from) {
+    var t = from, i;
+    for (i = 0; i < MEL.length; i++) {
+      var name = MEL[i][0], dur = MEL[i][1] * BEAT;
+      if (name !== 'R') tone(FREQ[name], t, dur * 0.94, 'square', 0.8);
+      t += dur;
+    }
+    var beats = Math.round((t - from) / BEAT);
+    var bt = from;
+    for (i = 0; i < beats; i++) {
+      tone(FREQ[BASS[Math.floor(i / 4) % BASS.length]], bt, BEAT * 0.45, 'triangle', 0.55);
+      bt += BEAT;
+    }
+    return t;
+  }
+
+  function armNext(from) {
+    var end = scheduleLoop(from);
+    /* margen de 1.5s para sobrevivir al throttle de timers en segundo plano */
+    var delay = Math.max((end - ctx.currentTime - 1.5) * 1000, 50);
+    timer = setTimeout(function () {
+      var start = end < ctx.currentTime + 0.05 ? ctx.currentTime + 0.05 : end;
+      armNext(start);
+    }, delay);
+  }
+
+  function start() {
+    ensureCtx();
+    if (!ctx || timer || muted) return;
+    if (ctx.state !== 'running') {
+      var p = ctx.resume();
+      if (p && p.then) {
+        p.then(function () { if (!timer && !muted) armNext(ctx.currentTime + 0.06); })
+         .catch(function () { /* bloqueado hasta el primer gesto */ });
+      }
+      return;
+    }
+    armNext(ctx.currentTime + 0.06);
+  }
+
+  function stop() {
+    if (timer) { clearTimeout(timer); timer = null; }
+    if (master && ctx) master.gain.setTargetAtTime(0, ctx.currentTime, 0.02);
+  }
+
+  paint();
+  start();   // intento de autoplay al abrir
+
+  /* Si el navegador bloquea el autoplay, arranca en el primer gesto */
+  ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) {
+    document.addEventListener(ev, function once() {
+      document.removeEventListener(ev, once);
+      start();
+    }, { once: true, passive: true });
+  });
+
+  btn.addEventListener('click', function () {
+    muted = !muted;
+    try { localStorage.setItem('xmasMusicMuted', muted ? '1' : '0'); } catch (e) {}
+    paint();
+    if (muted) {
+      stop();
+    } else {
+      if (master && ctx) master.gain.setTargetAtTime(VOL, ctx.currentTime, 0.02);
+      timer = null;            // fuerza reanudación limpia
+      start();
+    }
+  });
 })();
 </script>
 
