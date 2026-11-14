@@ -1582,7 +1582,7 @@
       <span class="video-live" id="videoLive"><span class="dot"></span> Enlace satelital activo</span>
     </div>
     <div class="video-wrap">
-      <video id="xmasVideo" controls playsinline preload="metadata">
+      <video id="xmasVideo" controls playsinline preload="metadata" autoplay>
         <source src="video/villancico-otan-2024.webm" type="video/webm">
         <source src="video/Recordamos%20el%20villancico%20cantado%20por%20soldados%20de%20la%20OTAN%20en%202024.mp4" type="video/mp4">
         Tu navegador no soporta el video.
@@ -2103,49 +2103,51 @@
   });
   paintPlayBtn();
 
-  function tryPlay() {
+  /* El video arranca solo (aunque el splash esté encima). Primer intento: con sonido */
+  function startMuted(muted) {
     if (started) return;
+    v.muted = muted;
     var p = v.play();
     if (p && p.then) {
       p.then(function () {
         started = true;
         if (fallback) fallback.classList.remove('show');
       }).catch(function () {
-        /* bloqueado: se reintenta en el primer gesto del usuario */
+        if (!muted) startMuted(true);   // sonido bloqueado → arranca en silencio ya
       });
     } else {
       started = true;   // navegadores viejos sin promesas
     }
   }
 
-  /* 1) Intento inmediato al abrir */
-  tryPlay();
+  /* 1) Autoplay al cargar: con sonido, o en silencio si el navegador lo exige */
+  startMuted(false);
 
-  /* 2) Si el navegador exige gesto, arranca en el primer clic/tecla */
+  /* 2) Primer gesto del usuario → se activa el audio (si estaba silenciado) */
   function onGesture() {
-    tryPlay();
-    if (started) {
-      document.removeEventListener('pointerdown', onGesture);
-      document.removeEventListener('keydown', onGesture);
-      document.removeEventListener('touchstart', onGesture);
-    }
+    if (started && v.muted) v.muted = false;
+    if (!started) startMuted(false);
+    document.removeEventListener('pointerdown', onGesture);
+    document.removeEventListener('keydown', onGesture);
+    document.removeEventListener('touchstart', onGesture);
   }
   document.addEventListener('pointerdown', onGesture, { passive: true });
   document.addEventListener('keydown', onGesture, { passive: true });
   document.addEventListener('touchstart', onGesture, { passive: true });
 
-  /* 3) Botón grande: reproducir / reanudar */
+  /* 3) Botón grande: reproducir / reanudar (siempre con sonido) */
   if (playBtn) {
     playBtn.addEventListener('click', function (e) {
       e.stopPropagation();
       started = true;               // gesto explícito: ya no insistimos con autoplay
       if (fallback) fallback.classList.remove('show');
+      v.muted = false;
       v.play();
       v.focus({ preventScroll: true });
     });
   }
 
-  /* 4) Aviso si aún así no arranca (autoplay bloqueado) */
+  /* 4) Aviso solo si ni siquiera arrancó en silencio (bloqueo total) */
   setTimeout(function () {
     if (!started && fallback) fallback.classList.add('show');
   }, 2500);
