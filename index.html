@@ -709,7 +709,7 @@
 
   .splash {
     background: var(--panel);
-    border: 2px solid var(--red);
+    border: 2px solid var(--green);
     max-width: 560px;
     width: 100%;
     max-height: calc(100vh - 32px);
@@ -719,7 +719,7 @@
     padding: 34px 30px 30px;
     text-align: center;
     position: relative;
-    box-shadow: 0 0 60px rgba(255,77,77,.3), 0 20px 60px rgba(0,0,0,.7);
+    box-shadow: 0 0 60px rgba(63,255,122,.28), 0 20px 60px rgba(0,0,0,.7);
     animation: splashPop .5s cubic-bezier(.2, 1.4, .4, 1);
     clip-path: polygon(22px 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%, 0 22px);
   }
@@ -728,7 +728,7 @@
   .splash .corner {
     position: absolute;
     width: 28px; height: 28px;
-    border-color: var(--red);
+    border-color: var(--green);
     border-style: solid;
   }
   .splash .c1 { top: 8px; left: 8px; border-width: 3px 0 0 3px; }
@@ -741,8 +741,8 @@
     font-size: .7rem;
     letter-spacing: .35em;
     text-transform: uppercase;
-    color: #fff;
-    background: var(--red);
+    color: #0a0f0c;
+    background: var(--green);
     font-weight: 700;
     padding: 6px 16px;
     margin-bottom: 18px;
@@ -756,7 +756,7 @@
     line-height: 1.3;
     margin-bottom: 12px;
   }
-  .splash h3 span { color: var(--red); }
+  .splash h3 span { color: var(--green); }
   .splash .msg {
     color: var(--text);
     font-size: 1.02rem;
@@ -834,6 +834,47 @@
     letter-spacing: .1em;
     text-transform: uppercase;
     color: var(--muted);
+  }
+
+  /* Regalo recibido (estado positivo) */
+  .evidence.received {
+    border-color: var(--green);
+    box-shadow: 0 0 22px rgba(63,255,122,.35);
+    transform: rotate(1deg);
+  }
+  .evidence.received::before {
+    content: "RECIBIDO";
+    background: var(--green);
+    color: #0a0f0c;
+  }
+  .evidence .pending.got {
+    background:
+      repeating-linear-gradient(45deg, rgba(63,255,122,.06) 0 10px, transparent 10px 20px),
+      #050807;
+  }
+  .evidence .pending.got .pending-tag {
+    background: var(--green);
+    color: #0a0f0c;
+  }
+  .evidence .pending.got .pending-code {
+    color: var(--green);
+    text-shadow: 0 0 16px rgba(63,255,122,.6);
+    animation: none;
+  }
+
+  /* Nota de bono y porcentaje fuera de escala */
+  .prob-note {
+    text-align: left;
+    margin: -6px 0 14px;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+  .prob-row .pct.over {
+    color: #fff;
+    text-shadow: 0 0 12px rgba(63,255,122,.9);
   }
 
   /* Barras de probabilidad */
@@ -989,8 +1030,8 @@
     display: block;
     width: 100%;
     margin-top: 24px;
-    background: var(--red);
-    color: #fff;
+    background: var(--green);
+    color: #0a0f0c;
     border: none;
     font-family: 'Black Ops One', cursive;
     font-size: .95rem;
@@ -1003,8 +1044,440 @@
   }
   .splash-btn:hover {
     background: #fff;
+    color: var(--green);
+    box-shadow: 0 0 24px rgba(63,255,122,.6);
+  }
+
+  /* ---------- JUEGO DE TIRO ---------- */
+  .game-card { border-left-color: var(--amber); }
+  .game-card:hover { border-left-color: var(--amber); }
+  .game-card::after { border-color: rgba(255,179,71,.5); }
+  .game-card h2 { color: var(--amber); }
+  .game-card li::before { color: var(--amber); }
+  .game-card.highlight {
+    border-color: var(--green);
+    border-left-color: var(--green);
+    box-shadow: 0 0 0 1px var(--green), 0 0 34px rgba(63,255,122,.45);
+    transform: translateY(-3px);
+    transition: all .4s ease;
+  }
+  .game-card.highlight::after { border-color: var(--green); opacity: 1; }
+
+  .game-launch {
+    display: inline-block;
+    margin-top: 18px;
+    background: var(--amber);
+    color: #0a0f0c;
+    border: none;
+    font-family: 'Black Ops One', cursive;
+    font-size: .95rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    cursor: pointer;
+    clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+    transition: all .2s;
+  }
+  .game-launch:hover {
+    background: #fff;
+    color: var(--amber);
+    box-shadow: 0 0 26px rgba(255,179,71,.6);
+  }
+
+  .game-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 950;
+    background: rgba(4,7,5,.97);
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    overflow-y: auto;
+  }
+  .game-overlay.show { display: flex; animation: splashIn .3s ease; }
+
+  .game-panel {
+    position: relative;
+    width: min(880px, 100%);
+    background: var(--panel);
+    border: 2px solid var(--amber);
+    box-shadow: 0 0 55px rgba(255,179,71,.28), 0 24px 60px rgba(0,0,0,.7);
+    clip-path: polygon(22px 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%, 0 22px);
+    animation: splashPop .4s cubic-bezier(.2, 1.4, .4, 1);
+  }
+
+  .game-hud {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 18px;
+    padding: 13px 18px;
+    background: rgba(255,179,71,.08);
+    border-bottom: 2px solid var(--line);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .95rem;
+    letter-spacing: .12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .game-hud b { color: var(--amber); font-size: 1.3rem; letter-spacing: .05em; }
+  .game-hud .goal { color: var(--green); font-size: .95rem; }
+  .game-hud .game-hint {
+    flex: 1;
+    font-size: .7rem;
+    letter-spacing: .08em;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .game-exit {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid var(--red);
     color: var(--red);
-    box-shadow: 0 0 24px rgba(255,77,77,.6);
+    font-family: 'Black Ops One', cursive;
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all .2s;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  }
+  .game-exit:hover { background: var(--red); color: #fff; }
+
+  .game-field {
+    position: relative;
+    height: min(58vh, 440px);
+    min-height: 300px;
+    background:
+      linear-gradient(rgba(255,179,71,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,179,71,.05) 1px, transparent 1px),
+      #050807;
+    background-size: 36px 36px;
+    overflow: hidden;
+    cursor: crosshair;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .target {
+    position: absolute;
+    padding: 0;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    background:
+      radial-gradient(circle, #fff 0 16%, var(--red) 16% 38%, #fff 38% 58%, var(--red) 58% 78%, #fff 78% 100%);
+    box-shadow: 0 0 18px rgba(255,77,77,.75);
+    transform: translate(-50%, -50%) scale(0);
+    animation: targetIn .16s ease-out forwards;
+    cursor: crosshair;
+    z-index: 2;
+  }
+  @keyframes targetIn { to { transform: translate(-50%, -50%) scale(1); } }
+  .target.pop {
+    animation: targetPop .16s ease-out forwards;
+    pointer-events: none;
+  }
+  @keyframes targetPop {
+    to { transform: translate(-50%, -50%) scale(1.7); opacity: 0; }
+  }
+  .target.missed {
+    border-color: var(--muted);
+    background: radial-gradient(circle, var(--muted) 0 30%, transparent 32%);
+    box-shadow: none;
+    opacity: .45;
+    animation: none;
+    transform: translate(-50%, -50%) scale(1);
+    transition: opacity .2s;
+  }
+
+  .float-score {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    font-family: 'Share Tech Mono', monospace;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--green);
+    text-shadow: 0 0 10px rgba(63,255,122,.9);
+    pointer-events: none;
+    z-index: 3;
+    animation: floatUp .7s ease-out forwards;
+  }
+  @keyframes floatUp {
+    to { transform: translate(-50%, -220%); opacity: 0; }
+  }
+
+  .game-win {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: rgba(4,7,5,.95);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 12px;
+    padding: 26px 20px;
+  }
+  .game-win.show { display: flex; animation: splashIn .35s ease; }
+  .win-badge {
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    color: #0a0f0c;
+    background: var(--green);
+    padding: 6px 16px;
+    clip-path: polygon(9px 0, 100% 0, calc(100% - 9px) 100%, 0 100%);
+  }
+  .game-win h3 {
+    font-family: 'Black Ops One', cursive;
+    font-size: clamp(1.2rem, 5vw, 1.7rem);
+    color: #fff;
+    letter-spacing: .06em;
+  }
+  .game-win p { font-size: .98rem; color: var(--text); max-width: 560px; }
+  .code-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(1.5rem, 7vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: .28em;
+    padding: 12px 22px 12px 30px;
+    color: #0a0f0c;
+    background: var(--green);
+    box-shadow: 0 0 34px rgba(63,255,122,.65);
+    clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+    user-select: all;
+    -webkit-user-select: all;
+  }
+  .win-note { color: var(--muted) !important; font-size: .9rem !important; }
+  .win-note strong { color: var(--amber); }
+  .win-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 8px;
+  }
+  .win-actions .game-launch { margin-top: 0; }
+  .game-again {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-family: 'Black Ops One', cursive;
+    font-size: .85rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 14px 24px;
+    cursor: pointer;
+    clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+    transition: all .2s;
+  }
+  .game-again:hover { border-color: var(--green); color: var(--green); }
+
+  @media (max-width: 560px) {
+    .game-field { height: 54vh; min-height: 260px; }
+    .game-hud { font-size: .8rem; gap: 6px 12px; padding: 10px 12px; }
+    .game-hud b { font-size: 1.1rem; }
+    .game-hud .game-hint { display: none; }
+    .game-exit { margin-left: auto; }
+  }
+
+  /* ---------- TEMÁTICA NAVIDEÑA TÁCTICA ---------- */
+  /* Nieve ligera sobre todo el dossier */
+  .snow {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 180;
+    overflow: hidden;
+  }
+  .snow i {
+    position: absolute;
+    top: -12px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: .55;
+    animation: snowfall linear infinite;
+    box-shadow: 0 0 6px rgba(255,255,255,.7);
+  }
+  @keyframes snowfall {
+    0%   { transform: translate3d(0, -12px, 0); }
+    50%  { transform: translate3d(24px, 50vh, 0); }
+    100% { transform: translate3d(-12px, 105vh, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) { .snow { display: none; } }
+
+  /* ---------- VIDEO VILLANICO NATO ---------- */
+  .video-card {
+    border-left-color: var(--red);
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,77,77,.1), transparent 60%),
+      var(--panel);
+    padding: 0;
+    overflow: hidden;
+  }
+  .video-card:hover { transform: none; border-left-color: var(--red); }
+  .video-card::after { border-color: rgba(255,77,77,.5); }
+  .video-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 14px;
+    padding: 18px 22px 14px;
+    border-bottom: 2px solid var(--line);
+    background:
+      repeating-linear-gradient(45deg, rgba(255,77,77,.07) 0 12px, transparent 12px 24px),
+      rgba(63,255,122,.05);
+  }
+  .video-head h2 { margin-bottom: 0; color: var(--red); }
+  .video-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--red);
+    padding: 5px 14px;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    animation: urgentPulse 1.4s ease-in-out infinite;
+  }
+  .video-wrap {
+    position: relative;
+    background: #000;
+    line-height: 0;
+  }
+  .video-wrap video {
+    display: block;
+    width: 100%;
+    max-height: 68vh;
+    object-fit: contain;
+    background: #000;
+  }
+  /* Botón de play grande superpuesto */
+  .video-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(76px, 15vw, 116px);
+    height: clamp(76px, 15vw, 116px);
+    border-radius: 50%;
+    background: rgba(10, 15, 12, .88);
+    border: 3px solid var(--red);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 34px rgba(255,77,77,.55), 0 10px 30px rgba(0,0,0,.6);
+    z-index: 5;
+    transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+    animation: playPulse 1.8s ease-in-out infinite;
+    padding: 0;
+  }
+  @keyframes playPulse {
+    0%, 100% { box-shadow: 0 0 22px rgba(255,77,77,.45), 0 10px 30px rgba(0,0,0,.6); }
+    50%      { box-shadow: 0 0 48px rgba(255,77,77,.85), 0 10px 30px rgba(0,0,0,.6); }
+  }
+  .video-play:hover {
+    background: var(--red);
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+  .video-play svg {
+    width: 44%;
+    height: 44%;
+    fill: currentColor;
+    stroke: none;
+    margin-left: 8%;   /* centrado óptico del triángulo */
+  }
+  .video-play.hide { display: none; }
+  .video-hint {
+    padding: 12px 22px 16px;
+    color: var(--muted);
+    font-size: .92rem;
+    font-style: italic;
+    letter-spacing: .04em;
+    border-top: 1px dashed var(--line);
+    line-height: 1.6;
+  }
+  .video-hint strong { color: var(--green); font-style: normal; }
+  .video-fallback {
+    display: none;
+    margin: 0;
+    padding: 10px 22px;
+    background: rgba(255,179,71,.1);
+    border-top: 1px dashed rgba(255,179,71,.5);
+    color: var(--amber);
+    font-size: .88rem;
+    letter-spacing: .05em;
+  }
+  .video-fallback.show { display: block; }
+  @media (max-width: 560px) {
+    .video-head { padding: 14px 16px 12px; }
+    .video-head h2 { font-size: .95rem; }
+    .video-hint { padding: 10px 16px 14px; font-size: .85rem; }
+  }
+
+  /* Árboles navideños tácticos en el encabezado */
+  .tree {
+    position: absolute;
+    bottom: 14px;
+    width: clamp(58px, 11vw, 96px);
+    opacity: .16;
+    filter: drop-shadow(0 0 8px rgba(63,255,122,.5));
+    pointer-events: none;
+  }
+  .tree-left { left: clamp(8px, 4vw, 46px); }
+  .tree-right { right: clamp(8px, 4vw, 46px); transform: scaleX(-1); }
+  @media (max-width: 640px) { .tree { opacity: .1; width: 58px; bottom: 8px; } }
+
+  /* Cinta de caramelo (borde rojo/blanco) para el letreto de regalos */
+  .sign { border-color: rgba(255,77,77,.55); }
+  .sign-head {
+    background:
+      repeating-linear-gradient(45deg, rgba(255,77,77,.14) 0 12px, rgba(255,255,255,.05) 12px 24px),
+      rgba(63,255,122,.08);
+  }
+
+  /* Insignia navideña */
+  .badge.xmas {
+    border-color: rgba(255,77,77,.6);
+    background: linear-gradient(90deg, rgba(255,77,77,.16), rgba(63,255,122,.1));
+    color: #fff;
+  }
+
+  /* Briefing navideño */
+  .xmas-brief {
+    border-left-color: var(--red);
+    background:
+      radial-gradient(ellipse at 12% 0%, rgba(255,77,77,.1), transparent 55%),
+      var(--panel);
+  }
+  .xmas-brief:hover { border-left-color: var(--red); }
+  .xmas-brief::after { border-color: rgba(255,77,77,.5); }
+  .xmas-brief h2 { color: var(--red); }
+  .xmas-brief li::before { color: var(--red); }
+  .xmas-brief .tag-xmas {
+    display: inline-block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    color: #0a0f0c;
+    background: linear-gradient(90deg, var(--red), var(--amber));
+    padding: 5px 14px;
+    margin-bottom: 12px;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
   }
 
   /* ---------- JUEGO DE TIRO ---------- */
@@ -1462,33 +1935,35 @@
     <span class="corner c3"></span>
     <span class="corner c4"></span>
 
-    <div class="splash-badge">Comunicado oficial</div>
-    <h3>Han ofrecido una <span>disculpa</span></h3>
+    <div class="splash-badge">Informe de revisión</div>
+    <h3>Bono de <span>recuperación</span></h3>
     <p class="msg">
-      Hoy me dejaron un regalo que <strong>no pude revisar</strong>: andaba en el
-      <strong>círculo militar</strong> en labores de inteligencia. El regalo será
-      <strong>inspeccionado el lunes</strong>. Mientras tanto, la puntuación sube a
-      <strong>60% bueno</strong> y <strong class="bad-txt">40% malo</strong>, hasta que se revise.
+      El regalo del <strong>13/11/2026</strong> ya fue revisado y
+      <strong>enmienda la falla de calidad</strong> del primer regalo.
+      Además, el regalo del <strong>20/11/2026</strong> <strong>superó las expectativas</strong>:
+      <strong>122.3% bueno</strong> y <strong class="bad-txt">-22.3% malo</strong>,
+      otorgado como <strong>bono de recuperación</strong>.
     </p>
 
-    <div class="evidence">
-      <div class="pending">
-        <span class="pending-tag">Regalo en cuarentena</span>
-        <span class="pending-code">INSPECCIÓN · LUNES</span>
-        <span class="pending-note">Clasificado · no abierto en labores de inteligencia</span>
+    <div class="evidence received">
+      <div class="pending got">
+        <span class="pending-tag">Regalo recibido</span>
+        <span class="pending-code">JUEGO TIPO UNO</span>
+        <span class="pending-note">Juego de cartas · clasificado extraordinario</span>
       </div>
     </div>
 
     <div class="prob good">
-      <div class="prob-row"><span>Regalo bueno</span><span class="pct">60%</span></div>
-      <div class="prob-track"><div class="prob-fill" style="--w:60%"></div></div>
+      <div class="prob-row"><span>Regalo bueno</span><span class="pct over">122.3%</span></div>
+      <div class="prob-track"><div class="prob-fill" style="--w:100%"></div></div>
     </div>
     <div class="prob bad">
-      <div class="prob-row"><span>Regalo malo</span><span class="pct">40%</span></div>
-      <div class="prob-track"><div class="prob-fill" style="--w:40%"></div></div>
+      <div class="prob-row"><span>Regalo malo</span><span class="pct">-22.3%</span></div>
+      <div class="prob-track"><div class="prob-fill" style="--w:0%"></div></div>
     </div>
+    <div class="prob-note">Bono de recuperación · excede la escala estándar</div>
 
-    <div class="splash-status"><span class="dot"></span> Aceptación condicional · Revisión el lunes</div>
+    <div class="splash-status"><span class="dot"></span> Aceptación superada · Bono activo</div>
 
     <div class="clue">
       <span class="clue-label"><svg class="ico" viewBox="0 0 24 24"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg> Pista confidencial</span>
@@ -1654,10 +2129,10 @@
     <div class="chips logos">
       <span class="chip-logo used"><span class="used-tag">Entregado</span><img src="logos/doritos.png" alt="Regalo entregado"><small>Regalo #1</small></span>
       <span class="chip-logo"><img src="logos/takis.webp" alt="Takis"><small>Takis</small></span>
-      <span class="chip-logo"><img src="logos/cheetos.webp" alt="Cheetos"><small>Cheetos</small></span>
-      <span class="chip-logo"><img src="logos/ruffles.svg" alt="Ruffles"><small>Papas Ruffles</small></span>
+      <span class="chip-logo used"><span class="used-tag">Entregado</span><img src="logos/cheetos.webp" alt="Regalo entregado"><small>Cheetos</small></span>
+      <span class="chip-logo used"><span class="used-tag">Entregado</span><img src="logos/ruffles.svg" alt="Regalo entregado"><small>Papas Ruffles</small></span>
       <span class="chip-logo"><img src="logos/natuchips.webp" alt="Natuchips"><small>Snacks salados</small></span>
-      <span class="chip-logo"><img src="logos/refrescos.png" alt="Refrescos"><small>Refresco / bebida</small></span>
+      <span class="chip-logo used"><span class="used-tag">Entregado</span><img src="logos/refrescos.png" alt="Regalo entregado"><small>Glup</small></span>
     </div>
   </section>
 
@@ -1671,7 +2146,7 @@
       </div>
       <div class="tier t2">
         <div class="tier-label">Viernes</div>
-        <div class="tier-desc"><strong style="color:#fff">Snacks salados</strong> de este estilo (Takis, Cheetos, papas, etc.).</div>
+        <div class="tier-desc"><strong style="color:#fff">Snacks salados</strong> de este estilo (Takis, natuchips, papas, etc.).</div>
       </div>
       <div class="tier t3">
         <div class="tier-label">Comodín</div>
